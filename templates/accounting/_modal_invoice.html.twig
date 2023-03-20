@@ -1,0 +1,47 @@
+<div class="modal fade" tabindex="-1" id="addInvoiceModal" {{ stimulus_target('accounting--index', 'addInvoinceModal') }}>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            {{ form_start(form, {'attr':{'data-accounting--index-target':'addInvoiceForm'}}) }}
+            <div class="modal-header">
+                <h5 class="modal-title title-center">IMPORTER UNE FACTURE</h5>
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <span class="svg-icon svg-icon-2x"></span>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row mb-8 text-center title-center">
+                    {{ form_label(form.name, null, {'label_attr':{'class':'col-xl-12 col-lg-12 col-form-label'}}) }}
+                    <div class="col-lg-6 col-xl-6 custom-pos-invoiced">
+                        {{ form_widget(form.name, {'attr':{'class':form.name.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                        {{ form_errors(form.name) }}
+                    </div>
+                </div>
+                <div class="form-group row mb-8">
+                    <div class="col-lg-6 col-xl-6">
+                        {{ form_label(form.startDate, null, {'label_attr':{'class':'col-xl-12 col-lg-12 col-form-label'}}) }}
+                        {{ form_widget(form.startDate, {'attr':{'class':form.startDate.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                        {{ form_errors(form.startDate) }}
+                    </div>
+                    <div class="col-lg-6 col-xl-6">
+                        {{ form_label(form.endDate, null, {'label_attr':{'class':'col-xl-12 col-lg-12 col-form-label'}}) }}
+                        {{ form_widget(form.endDate, {'attr':{'class':form.endDate.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                        {{ form_errors(form.endDate) }}
+                    </div>
+                </div>
+                <div class="form-group row mb-8 text-center">
+                    {{ form_label(form.documentFile, null, {'label_attr':{'class':'col-xl-12 col-lg-12 col-form-label'}}) }}
+                    <div class="col-lg-6 col-xl-6 custom-pos-invoiced">
+                        {{ form_widget(form.documentFile, {'attr':{'class':form.documentFile.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                        {{ form_errors(form.documentFile) }}
+                    </div>
+                </div>
+                <div class="form-group row mb-8 text-center">
+                    <div class="col-lg-12 col-xl-12 custom-pos-invoiced">
+                    {{ form_widget(form.submit, {'attr':{'class':'btn btn-primary-custom', 'data-action':'click->accounting--index#urlUpload'}}) }}
+                    </div>
+                </div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>

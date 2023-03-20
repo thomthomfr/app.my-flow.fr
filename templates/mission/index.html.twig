@@ -1,0 +1,399 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des missions{% endblock %}
+
+{% block styles %}
+    {{ encore_entry_link_tags('plugins/custom/datatables/datatables.bundle') }}
+{% endblock %}
+
+{% block body %}
+    <div id="kt_content_container" class="container-fluid" {{ stimulus_controller('order--index') }}>
+        <div class="titre-header">
+            {% if app.request.get('_route') == 'mission_index' %}
+                <h1>MES MISSIONS</h1>
+                <div class="d-flex {% if is_granted('ROLE_SUBCONTRACTOR') == false %}align-items-center{% else %}search-center{% endif %} position-relative my-1">
+            <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <rect x="0" y="0" width="24" height="24" />
+                        <path d="M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                        <path d="M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z" fill="#000000" fill-rule="nonzero" />
+                    </g>
+                </svg>
+            </span>
+                    <input type="text"
+                           class="form-control form-control w-600px ps-15"
+                           placeholder="Rechercher ..."
+                        {{ stimulus_action('order--index', 'searchTable', 'keyup') }}
+                    />
+                </div>
+                <div class="btn-wordpress-and-commande">
+                    {% if is_granted('ROLE_SUBCONTRACTOR') == false %}
+                        <a href="{{ front_website_url }}?tsso={{ hash('sha256', app.user.email ~ app.user.email) }}" target="_blank" class="btn btn-custom bg-custom-pink">Nouvelle commande</a>
+                    {% endif %}
+                    {% if is_granted('ROLE_ADMIN') == true %}
+                        <a href="{{ urlToConnectWp }}" target="_blank" class="btn btn-custom bg-custom-pink">Accéder à WordPress</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+        {% if is_granted('ROLE_CLIENT') == true %}
+            <h4 style="font-weight: normal">
+                {% if app.user.company.contract == constant('\\App\\Entity\\Company::PACK_CREDIT') %}
+                    Solde disponible : <strong>{{ app.user.company.currentBalance }} crédits</strong>
+                {% elseif app.user.company.contract == constant('\\App\\Entity\\Company::END_OF_MONTH_BILLING') %}
+                    Budget consommé depuis le premier du mois : <strong>{{ app.user.company.currentBalance }} €</strong>
+                {% elseif app.user.company.contract == constant('\\App\\Entity\\Company::MONTHLY_BILLING') and app.user.company.creditHistories.last != false %}
+                    Solde sur {{ app.user.company.creditHistories.last.mensualite }} HT/mois : <strong>{{ app.user.company.currentBalance }} €</strong>
+                {% endif %}
+            </h4>
+        {% endif %}
+        <div class="card shadow-sm mt-5" >
+            <div class="card-body">
+                <ul class="nav nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
+                    <li class="nav-item">
+                        <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab" href="#kt_en_cour_tab">En cours</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" href="#kt_historique_commande_tab">{% if is_granted('ROLE_SUBCONTRACTOR') %}Mes projets et factures{% else %}Historique de commande{% endif %}</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="kt_en_cour_tab" role="tabpanel">
+                        <table id="table_order_view" class="table table-row-bordered gy-5" {{ stimulus_target('order--index','datatable') }}>
+                            <thead>
+                            <tr class="fw-bold fs-6 text-muted">
+                                <th class="font-weight-bold" style="width: 200px;">Référence</th>
+                                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SUBCONTRACTOR') %}
+                                    <th class="font-weight-bold" style="width: 200px;">Entreprise</th>
+                                {% endif %}
+                                <th class="font-weight-bold" style="width: 200px;">Campagne</th>
+                                <th class="font-weight-bold" style="width: 200px;">Statut global</th>
+                                {% if not is_granted('ROLE_SUBCONTRACTOR') %}
+                                    <th class="font-weight-bold">Total HT</th>
+                                {% endif %}
+                                <th class="font-weight-bold" style="width: 50px;"> </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for campaign in campaigns|filter(c => c.state != 'archived' and c.state != 'cancelled') %}
+                                <tr data-mission-information='{{ include('mission/_data_mission.html.twig') }}'>
+                                    {% if campaign.missions is empty %}
+                                        <td class="arrow details-control"></td>
+                                    {% else %}
+                                        {% for mission in campaign.missions %}
+                                            {% if loop.first %}
+                                                <td class="arrow details-control">{{ mission.reference }}</td>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SUBCONTRACTOR') %}
+                                        <td class="arrow details-control">{{ campaign.company.name|raw }}</td>
+                                    {% endif %}
+                                    <td class="arrow details-control vertical-align color-blue-custom fw-bolder fs-3">{{ campaign.name|raw }}</td>
+                                    <td class="arrow details-control  valid-campaign">
+                                        {% if campaign.state == 'provisional' %}
+                                        <div class="progress progress-detail">
+                                            <div class="progress-bar progress-bar-provisoire bg-custom-blue" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="100" aria-valuemax="100">PROVISOIRE</div>
+                                        </div>
+                                        {% elseif campaign.state == 'waiting' %}
+                                            <div class="progress progress-detail">
+                                                <div class="progress-bar progress-bar-provisoire bg-custom-blue" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="100" aria-valuemax="100">EN ATTENTE D'EVALUATION</div>
+                                            </div>
+                                        {% elseif campaign.state == 'waiting_activated' %}
+                                            <div class="progress progress-detail">
+                                                <div class="progress-bar progress-bar-provisoire bg-custom-blue" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="100" aria-valuemax="100">EN ATTENTE D'ACTIVATION</div>
+                                            </div>
+                                        {% elseif campaign.state == 'in_progress' %}
+                                            <div class="progress progress-detail">
+                                                <div class="progress-bar progress-bar-valide" role="progressbar" style="width: {% if campaign.progress == 0 %}10{% else %}{{ campaign.progress }}{% endif %}%;" aria-valuenow="{{ campaign.progress }}" aria-valuemin="0" aria-valuemax="100">{{ campaign.progress }}%</div>
+                                            </div>
+                                        {% elseif campaign.state == 'paused' %}
+                                            <div class="progress progress-detail">
+                                                <div class="progress-bar progress-bar-provisoire bg-warning" role="progressbar" style="width: 100%;" aria-valuenow="{{ campaign.progress }}" aria-valuemin="0" aria-valuemax="100">EN PAUSE</div>
+                                            </div>
+                                        {% elseif campaign.state == 'archived'%}
+                                            <div class="progress progress-detail">
+                                                <div class="progress-bar progress-bar-finish" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">ARCHIVEE</div>
+                                            </div>
+                                        {% endif%}
+                                    </td>
+                                    {% if not is_granted('ROLE_SUBCONTRACTOR') %}
+                                        <td class="arrow details-control"><span id="campaign-{{ campaign.id }}-total-cost">{{ campaign.totalCost }}</span> {{ campaign.company.contract == constant('\\App\\Entity\\Company::PACK_CREDIT') ? 'crédits' : '€ HT' }}</td>
+                                    {% endif %}
+                                    <td class="text-end">
+                                        {% if is_granted('ROLE_ADMIN') or campaign.canActivate(is_granted('ROLE_ADMIN')) %}
+                                            <button type="button" class="btn btn-sm"
+                                                    data-kt-menu-trigger="click"
+                                                    data-kt-menu-placement="bottom-start">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                                                        <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                                                    </svg>
+                                            </button>
+                                            <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-200px py-4"
+                                                 data-kt-menu="true">
+                                                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SUBCONTRACTOR') %}
+                                                    {% if campaign.state == 'provisional' or campaign.state == 'waiting' or campaign.state == 'waiting_activated' %}
+                                                        <div class="menu-item px-3 font-weight-bold">
+                                                            <a href="{{ path('campaign_resoumission', {'id':campaign.id}) }}" class="menu-link px-3 font-weight-bold">
+                                                                Resoumission
+                                                            </a>
+                                                        </div>
+                                                    {% endif %}
+                                                {% endif %}
+                                                {% if is_granted('ROLE_ADMIN') %}
+                                                    {% if campaign.missions is not empty %}
+                                                        {% for mission in campaign.missions %}
+                                                            {% if loop.first %}
+                                                                <div class="menu-item px-3">
+                                                                    <a href="{{ path('mission_edit', {'id':mission.id}) }}" class="menu-link px-3 font-weight-bold">
+                                                                        Acceder
+                                                                    </a>
+                                                                </div>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                    {% if campaign.state == 'provisional' or campaign.state == 'waiting' or campaign.state == 'waiting_activated' %}
+                                                        <div class="menu-item px-3">
+                                                            <a href="{{ path('handle_mission_campaign', {'id':campaign.id}) }}" class="menu-link px-3 font-weight-bold">
+                                                                Modifier le panier
+                                                            </a>
+                                                        </div>
+                                                    {% endif %}
+                                                    {% if campaign.company.contract == 1 or campaign.company.contract == 2 %}
+                                                        <div class="menu-item px-3">
+                                                            <a href="{{ path('campaign_demande_evaluation', {'id':campaign.id}) }}" class="menu-link px-3 font-weight-bold">
+                                                                Demande d'évaluation
+                                                            </a>
+                                                        </div>
+                                                    {% endif %}
+                                                {% endif %}
+                                                {% if campaign.state in ['provisional'] and campaign.canActivate(is_granted('ROLE_ADMIN'), is_granted('ROLE_SUBCONTRACTOR')) %}
+                                                    <div class="menu-item px-3">
+                                                        <a href="{{ path('campaign_transition', {'id':campaign.id, 'transition':'validate'}) }}" class="menu-link px-3 font-weight-bold">
+                                                            Activation
+                                                        </a>
+                                                    </div>
+                                                {% elseif campaign.state in ['waiting', 'in_progress'] and campaign.canActivate(is_granted('ROLE_ADMIN'), is_granted('ROLE_SUBCONTRACTOR')) %}
+                                                    <div class="menu-item px-3">
+                                                        <a href="{{ path('campaign_transition', {'id':campaign.id, 'transition':'activated'}) }}" class="menu-link px-3 font-weight-bold">
+                                                            Activation
+                                                        </a>
+                                                    </div>
+                                                {% endif %}
+                                                {% if is_granted('ROLE_ADMIN') and campaign.state == 'in_progress' %}
+                                                    <div class="menu-item px-3">
+                                                        <a href="{{ path('campaign_transition', {'id':campaign.id, 'transition':'pause'}) }}" class="menu-link px-3 font-weight-bold">
+                                                            Mettre en pause
+                                                        </a>
+                                                    </div>
+                                                {% endif %}
+                                                {% if is_granted('ROLE_ADMIN') and campaign.state == 'paused' %}
+                                                    <div class="menu-item px-3">
+                                                        <a href="{{ path('campaign_transition', {'id':campaign.id, 'transition':'unpause'}) }}" class="menu-link px-3 font-weight-bold">
+                                                            Reprendre
+                                                        </a>
+                                                    </div>
+                                                {% endif %}
+                                                {% if is_granted('ROLE_ADMIN') and campaign.state == 'paused' %}
+                                                    <div class="menu-item px-3">
+                                                        <a href="{{ path('campaign_transition', {'id':campaign.id, 'transition':'unpause'}) }}" class="menu-link px-3 font-weight-bold">
+                                                            Reprendre
+                                                        </a>
+                                                    </div>
+                                                {% endif %}
+                                                {% if is_granted('ROLE_ADMIN') and campaign.state in ['provisional', 'in_progress', 'waiting'] %}
+                                                    <div class="menu-item px-3">
+                                                        <a class="menu-link px-3 font-weight-bold" data-url="{{ path('campaign_transition', {'id':campaign.id, 'transition':'cancel'}) }}" {{ stimulus_action('order--index','openCancelCampaignModal')}}>
+                                                            Annuler
+                                                        </a>
+                                                    </div>
+                                                {% endif %}
+                                                {% if is_granted('ROLE_ADMIN') and campaign.state == 'in_progress' %}
+                                                    <div class="menu-item px-3">
+                                                        <a href="{{ path('campaign_transition', {'id':campaign.id, 'transition':'archive'}) }}" class="menu-link px-3 font-weight-bold">
+                                                            Archiver
+                                                        </a>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        {% else %}
+                                            {% if campaign.missions is not empty %}
+                                                {% for mission in campaign.missions %}
+                                                    {% if loop.first %}
+                                                        <button type="button" class="btn btn-sm"
+                                                                data-kt-menu-trigger="click"
+                                                                data-kt-menu-placement="bottom-start">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                                                                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                                                            </svg>
+                                                        </button>
+                                                        <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-200px py-4"
+                                                             data-kt-menu="true">
+                                                            <div class="menu-item px-3">
+                                                                <a href="{{ path('mission_edit', {'id':mission.id}) }}" class="menu-link px-3 font-weight-bold">
+                                                                    Acceder
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade table-responsive" id="kt_historique_commande_tab" role="tabpanel">
+                        <table class="table table-row-bordered">
+                            <thead>
+                            <tr class="fw-bold fs-6 text-muted">
+                                <th>Date</th>
+                                <th>Mission</th>
+                                <th>Montant HT</th>
+                                <th>Montant TTC</th>
+                                <th>Crédit consommés</th>
+                                <th>Statut</th>
+                                <th>Facture</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% for month, missions in campaignCommand %}
+                                    <tr class="cursor-pointer" data-bs-toggle="collapse" href=".date-{{ month }}">
+                                        <td>{{ month|format_datetime(locale='fr',pattern="MMMM YYYY")|capitalize }}</td>
+                                        <td>Consommation mois de {{ month|format_datetime(locale='fr',pattern="MMMM") }}</td>
+                                        <td>
+                                        {% set totalHt = 0 %}
+                                         {# ######################  #}
+                                            {% if is_granted("ROLE_SUBCONTRACTOR")%}
+                                                    {% for campaign in missions %}
+                                                                {% for mm in  campaign.missions %}
+                                                                     {% if estimatedIncome is not empty %}
+                                                                            {% for income in estimatedIncome %}
+                                                                                {% if income and mm.id == income.mission.id and income.estimatedIncome is not empty %}
+                                                                                    {% set totalHt = totalHt + income.estimatedIncome %}
+                                                                                {% endif %}
+                                                                            {% endfor %}
+                                                                    {% else %}
+                                                                        {% for serv in  app.user.services %}
+                                                                            {% if mm.product.id == serv.product.id%}
+                                                                               {% set totalHt = totalHt + serv.price %}
+                                                                                {{ mm.id }} <br>
+                                                                            {% endif %} 
+                                                                        {% endfor %} 
+                                                                    {% endif %} 
+                                                                {% endfor %}
+                                                    {% endfor %}
+                                            {% else %}
+                                         {########################### #}
+                                            
+                                                {% if totalHtPerMonth is not empty %}
+                                                    {% for price in totalHtPerMonth[month] %}
+                                                        {% set totalHt = totalHt + price %}
+                                                    {% endfor %}
+                                                {% endif %}
+                                            {% endif %}
+                                            {{ totalHt|number_format(2) }} € 
+                                        </td>
+                                        <td>
+                                            {{ (totalHt * 1.2)|number_format(2) }} €
+                                        </td>
+                                        <td>
+                                            {% if creditConso is not empty %}
+                                                {% set creditTotal = 0 %}
+                                                 {% for credit in creditConso[month] %}
+                                                    {% set creditTotal = creditTotal + credit %}
+                                                {% endfor %}
+                                                {% if creditTotal != 0 %}
+                                                    {{ creditTotal }}
+                                                {% endif %}
+                                            {% endif %}
+                                        </td>
+                                        <td colspan="1">
+                                            {% if invoiced is not empty %}
+                                                {% set test = false %}
+                                                {% for invoicedDone in invoiced[month] %}
+                                                    {% set test = invoicedDone %}
+                                                {% endfor %}
+                                                {% if test == false %}
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill icon-statut" viewBox="0 0 16 16">
+                                                        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                                                    </svg>
+                                                {% endif %}
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% for campaign in missions %}
+                                        {% set servicePrice = 0 %}
+                                        <tr class="date-{{ month }} collapse in bg-secondary bg-opacity-50">
+                                            <td>{{ campaign.company.name }}</td>
+                                            <td>{{ campaign.name }}</td>
+                                            <td>
+                                                 {% if is_granted("ROLE_SUBCONTRACTOR") %}
+                                                        {% for mm in  campaign.missions %}
+                                                         {% if estimatedIncome is not empty %}
+                                                                {% for income in estimatedIncome %}
+                                                                    {% if income and mm.id == income.mission.id and income.estimatedIncome is not empty %}
+                                                                        {% set servicePrice = income.estimatedIncome %}
+                                                                        {{ servicePrice|number_format(2) }} €
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                         {% else %}
+                                                                {% for serv in  app.user.services %}
+                                                                    {% if mm.product.id == serv.product.id%}
+                                                                        {% set servicePrice = serv.price %}
+                                                                        {{ servicePrice|number_format(2) }} €
+                                                                    {% endif %} 
+                                                                {% endfor %} 
+                                                        {% endif %}
+                                                        {% endfor %}
+                                                  {% else %}
+                                                       {{ campaign.totalCost|number_format(2) }} € 
+                                                  {% endif %}
+                                               
+                                            
+                                            </td>
+                                            <td>
+                                                {% if is_granted("ROLE_SUBCONTRACTOR") %}
+                                                    {{( servicePrice* 1.2)|number_format(2)}} €
+                                                {% else %}
+                                                  {{ (campaign.totalCost * 1.2)|number_format(2) }} €
+
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if campaign.company.contract == 0 %}
+                                                    {{ (campaign.totalCost / campaign.company.costOfDiscountedCredit)|round }}
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if campaign.invoiced == 0 %}
+                                                    <b class="custom-facture-attente">Facture en attente</b>
+                                                {% else %}
+                                                    <b class="color-facture-ok">Facturé</b>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if campaign.invoiced == 1 %}
+                                                    {% for invoice in campaign.invoices %}
+                                                        <a href="{{ asset('uploads/invoices/' ~ invoice.documentName) }}" download><i class="fas fa-file-download"></i></a>
+                                                    {% endfor%}
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{ include('mission/_modal_cancel_campaign.html.twig') }}
+        {{ include('mission/_modal_cancel_mission.html.twig') }}
+        {{ include('mission/_modal_activate.html.twig') }}
+        {{ include('mission/_modal_initial_time.html.twig') }}
+    </div>
+{% endblock %}

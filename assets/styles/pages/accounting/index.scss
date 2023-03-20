@@ -1,0 +1,26 @@
+.btn-exported{
+    background-color: $color-blue-exported;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+}
+.title-center{
+    margin-left: auto;
+    margin-right: auto;
+}
+.custom-pos-invoiced{
+    margin-left: auto;
+    margin-right: auto;
+}
+.color-facture{
+    color: $color-facture;
+}
+.color-facture-ok{
+    color: $color-facture-ok;
+}
+@media screen and (max-width: 425px) {
+    .btn-exporte-accounting{
+        width: 100%;
+    }
+}
+

@@ -1,0 +1,18 @@
+{% extends 'security.html.twig' %}
+
+{% block title %}Email de réinitialisation de mot de passe envoyé{% endblock %}
+
+{% block content %}
+    <div class="pt-lg-10">
+        <!--begin::Logo-->
+        <h1 class="titillium-web-bold fw-bolder fs-2qx text-gray-800 mb-7">Instructions envoyées</h1>
+        <!--end::Logo-->
+        <!--begin::Message-->
+        <div class="fw-bold fs-3 text-muted mb-10">Si l'adresse email entrée correspond à un compte, un email vient d'être envoyé avec un lien afin de réinitialiser votre mot de passe.</div>
+        <!--end::Message-->
+        <!--begin::Action-->
+        <div class="text-gray-700 fw-bold fs-4 pt-7">Vous n'avez pas reçu l'email ? Merci de vérifier vos spams ou de <a href="{{ path('app_forgot_password_request') }}" class="text-primary fw-bolder mt-3">réessayer</a></div>
+        <!--end::Action-->
+        <a href="{{ path('app_login') }}" class="btn btn-primary-custom mt-15">Connexion</a>
+    </div>
+{% endblock %}

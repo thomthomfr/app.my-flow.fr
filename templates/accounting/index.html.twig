@@ -1,0 +1,106 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Comptabilité{% endblock %}
+
+{% block body %}
+    <div id="kt_content_container" class="container-fluid" {{ stimulus_controller('accounting--index') }}>
+        <div class="titre-header">
+            {% if app.request.get('_route') == 'accounting_index' %}
+                <h1>COMPTABILITE clients</h1>
+                <a href="/" class="btn btn-primary-custom btn-exporte-accounting">Exporter</a>
+            {% endif %}
+        </div>
+        <div class="card shadow-sm mt-5">
+            <div class="card-body table-responsive">
+                <table class="table table-row-bordered">
+                    <thead>
+                    <tr class="fw-bold fs-6 text-muted">
+                        <th>Date</th>
+                        <th >Clients</th>
+                        <th>Type</th>
+                        <th>Conso Euros</th>
+                        <th>Conso crédits</th>
+                        <th>Conso heures</th>
+                        <th>Montant à facturer</th>
+                        <th>Statut</th>
+                        <th>Facture</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for month, missions in campaigns %}
+                        <tr class="cursor-pointer" data-bs-toggle="collapse" href=".date-{{ month }}">
+                            <td colspan="6">{{ month|format_datetime(locale='fr',pattern="MMMM YYYY")|capitalize}}</td>
+                            <td>
+                                <b>
+                                    {% set totalHt = 0 %}
+                                    {% if price is not empty %}
+                                        {% for montantHt in price[month] %}
+                                            {% set totalHt = totalHt + montantHt %}
+                                        {% endfor %}
+                                    {% endif %}
+                                    {{ totalHt|number_format(2) }} €
+                                </b>
+                            </td>
+                        </tr>
+                        {% for campaign in missions %}
+                            <tr class="date-{{ month }} collapse in bg-secondary bg-opacity-50">
+                                <td colspan="2" style="text-align: right;">
+                                    {{ campaign.name }}
+                                </td>
+                                <td>
+                                    {% if campaign.company.contract == 0 %}
+                                        Pack de crédit
+                                    {% elseif campaign.company.contract == 1 %}
+                                        Facturation en fin de mois
+                                    {% elseif campaign.company.contract == 2 %}
+                                        Facturation mensuelle
+                                    {% endif %}
+                                </td>
+                                <td>{{ campaign.totalCost|number_format(2) }} €</td>
+                                <td>
+                                    {% if campaign.company.contract == 0 %}
+                                        {{ (campaign.totalCost / campaign.company.costOfDiscountedCredit)|round }} crédits
+                                    {% endif %}
+                                </td>
+                                <td></td>
+                                <td>
+                                    {% if campaign.company.contract != 2 %}
+                                    {{ form_start(formTotalCost, {'attr':{'data-accounting--index-target':'addTotalCostForm', 'id': 'formTotalCostChange'}})}}
+                                        <input data-cost="{{ path('accounting_total_cost', {'id': campaign.id })}}" type="text" id="{{ formTotalCost.vars.id }}" name="{{ formTotalCost.vars.full_name }}" class="form-check-input w-50 form-control input-total-cost" value="{{ campaign.totalCostCampaign ? campaign.totalCostCampaign : campaign.totalCost }}" {{ stimulus_action('accounting--index','changeTotalCost')}}>
+                                        {% do formTotalCost.totalCostCampaign.setRendered() %}
+                                    {{ form_end(formTotalCost)}}
+                                    {% else %}
+                                        {{ campaign.totalCost|number_format(2) }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if campaign.invoiced == 0 %}
+                                        <b class="color-facture">A facturer</b>
+                                    {% else %}
+                                        <b class="color-facture-ok">Facturé</b>
+                                    {% endif %}
+                                </td>
+                                <td class="text-center">
+                                    {% if campaign.invoiced == 0 %}
+                                    <button type="button" data-url="{{ path('accounting_upload', {'id': campaign.id}) }}" class="btn" {{ stimulus_action('accounting--index','openInvoiceModal')}}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                                        </svg>
+                                    </button>
+                                    {% else %}
+                                        {% for invoice in campaign.invoices %}
+                                            <a href="{{ asset('uploads/invoices/' ~ invoice.documentName) }}"><i class="fas fa-2x fa-file-download"></i></a>
+                                        {% endfor%}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {{ include('accounting/_modal_invoice.html.twig') }}
+    </div>
+{% endblock %}

@@ -1,0 +1,17 @@
+.titre-header{
+  display: flex;
+  justify-content: space-between;
+}
+.titre-header > h1{
+  margin-top: auto;
+  margin-bottom: auto;
+
+}
+.groupe-button-1{
+    display: flex;
+    justify-content: space-between;
+}
+.groupe-button-2{
+    display: flex;
+    justify-content: end;
+}

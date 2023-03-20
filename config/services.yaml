@@ -1,0 +1,40 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+parameters:
+    file_message_directory: '%kernel.project_dir%/public/uploads/mission'
+    file_mission_directory: '%kernel.project_dir%/public/uploads/mission'
+    front_website_api_base_url: '%env(resolve:FRONT_WEBSITE_API_BASE_URL)%'
+    front_website_url: '%env(resolve:FRONT_WEBSITE_URL)%'
+    file_invoice_campaign: '%kernel.project_dir%/public/uploads/campaign'
+    sms_api_base_url: '%env(resolve:SMS_API_BASE_URL)%'
+    sms_api_token: '%env(resolve:SMS_API_TOKEN)%'
+    imap_host: '%env(resolve:IMAP_HOST)%'
+    imap_username: '%env(resolve:IMAP_USERNAME)%'
+    imap_password: '%env(resolve:IMAP_PASSWORD)%'
+    url_redirect_to_front: 'https://dev.my-flow.fr'
+    dir_logo_company: 'https://app.dev.my-flow.fr/uploads/images/company/'
+
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    App\EventListener\LoginListener:
+        tags:
+            - { name: 'kernel.event_listener', event: 'security.interactive_login' }
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones

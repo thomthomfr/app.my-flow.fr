@@ -1,0 +1,42 @@
+<div class="modal fade" id="addServiceModal" {{ stimulus_target('subContractor--handle', 'addServiceModal') }}>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            {{ form_start(form2, {'attr':{'data-subContractor--handle-target':'addServiceForm'}}) }}
+            <div class="modal-header">
+                <h5 class="modal-title">Ajouter/modifier un produit</h5>
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <span class="svg-icon svg-icon-2x"></span>
+                </div>
+            </div>
+            <div class="modal-body">
+                <table id="kt_datatable_example_1" class="table table-row-bordered gy-5">
+                    <thead>
+                    <tr class="fw-bold fs-6 text-muted">
+                        <th>Nom</th>
+                        {% if user.billingMethod != constant('\\App\\Enum\\BillingMethod::BILL_TIME_PAST').value %}
+                            <th>Prix</th>
+                        {% endif %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            {{ form_widget(form2.product, {'attr':{'class':form2.product.vars.errors|length ? 'form-control is-invalid':'form-control', 'data-subContractor--handle-target':'serviceName select2', 'required':'required'}}) }}
+                        </td>
+                        {% if user.billingMethod != constant('\\App\\Enum\\BillingMethod::BILL_TIME_PAST').value %}
+                            <td>
+                                {{ form_widget(form2.price, {'attr':{'class':form2.price.vars.errors|length ? 'form-control is-invalid':'form-control', 'data-subContractor--handle-target':'servicePrice'}}) }}
+                            </td>
+                        {% endif %}
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-custom-retour" data-bs-dismiss="modal">Fermer</button>
+                {{ form_widget(form2.submit, {'attr':{'class':'btn btn-primary-custom'}}) }}
+            </div>
+            {{ form_widget(form2.serviceId, {'attr':{'data-subContractor--handle-target':'hiddenServiceId'}}) }}
+            {{ form_end(form2) }}
+        </div>
+    </div>
+</div>

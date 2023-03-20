@@ -1,0 +1,36 @@
+<div class="card">
+    <div class="card-body">
+        <h3 class="text-center">
+            DEMANDE INITIALE
+            <a type="button" class="ms-2" title="Modifier la demande initiale" data-bs-toggle="modal" data-bs-target="#initialBrief"><i class="fas fa-edit"></i></a>
+        </h3>
+        <p>{{ mission.initialBriefing|raw is not empty ? mission.initialBriefing|raw : mission.campaign.brief|raw }}</p>
+        <div class="box-fichier-joints-mission mt-9">
+            {{ form_start(form3, {'attr':{'id':'addAttachementForm'}}) }}
+            <h3>Fichiers joints au message
+                <div class="parent-div">
+                    <button type="button" class="btn btn-transparant btn-join-file-mission"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                        </svg>
+                    </button>
+                    {{ form_widget(form3.fileMissions, {'attr':{'class':form3.fileMissions.vars.errors|length ? 'form-control is-invalid':'form-control btn btn-transparant btn-join-file-mission','onchange':'document.getElementById("addAttachementForm").requestSubmit();'}}) }}
+                </div>
+            </h3>
+            {{ form_end(form3) }}
+            <div class="table-responsive">
+                <table class="table">
+                    <tbody>
+                    {% for file in mission.fileMissions %}
+                        <tr>
+                            <td class="custom-table2"><img src="{{ asset('build/media/mission/file.png') }}"/><a href="{{ asset('uploads/mission/' ~ mission.id ~ '/' ~ file.name) }}" target="_blank">{{file.name }}</a></td>
+                            <td class="text-end"><a href="{{ asset('uploads/mission/' ~ mission.id ~ '/' ~ file.name) }}" download><button class="btn btn-sm btn-light custom-mr"><i class="fas fa-download"></i></button></a></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{{ include('mission/_modal_demande_initial.html.twig') }}
+

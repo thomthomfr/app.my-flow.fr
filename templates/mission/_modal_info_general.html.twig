@@ -1,0 +1,38 @@
+{{ form_start(form2, {'attr':{'id':'infoGeneral_form','novalidate':'novalidate','data-message--handle-target':'form'}}) }}
+<div class="modal fade" tabindex="-1" id="kt_modal_1">
+    <div class="modal-dialog">
+        <div class="modal-content modal-content-custom">
+            <div class="modal-header custom-header">
+                <h5 class=" text-center">INFORMATIONS GÉNÉRALES</h5>
+                <button class="btn btn-sm btn-light custom-mr btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                {% for information in informations %}
+                    <div class="info-post">
+                        <b><img src="{{ asset('build/media/mission/avatar-chat-default.png') }}"/> {{ information.user.firstname }} </b> <span>{{ information.createdAt|date('G') }}h{{ information.createdAt|date('i') }}</span>
+                        <p>{{ information.content }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="typing-message">
+                {{ form_widget(form2.content, {'attr':{'class':form2.content.vars.errors|length ? 'form-control is-invalid':'form-control mb-5'}}) }}
+            </div>
+            <div class="modal-footer-custom">
+                <button
+                    type="submit"
+                    class="btn btn-primary-custom mt-5 h-50px font-weight-bold"
+                    data-kt-stepper-action="submit"
+                    {{ stimulus_action('messsage--handle', 'submitForm') }}
+                >
+                 <span class="indicator-label">
+                      Répondre
+                 </span><span class="indicator-progress">
+                     Enregistrement... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{{ form_end(form2) }}

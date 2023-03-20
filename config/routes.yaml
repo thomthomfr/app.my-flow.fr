@@ -1,0 +1,16 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+
+homepage:
+    path: /
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
+    defaults:
+        route: mission_index
+        permanent: true
+        
+live_component:
+    resource: '@LiveComponentBundle/Resources/config/routing/live_component.xml'
+
+api_login:
+    path: /api/v2/login

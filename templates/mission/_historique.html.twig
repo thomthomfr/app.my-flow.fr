@@ -1,0 +1,26 @@
+<div class="card pt-4 mb-6" style="margin-right: 25px;">
+    <div class="titre-header">
+        <span class="font-weight-bold" style="display: flex; align-items: center; padding: 0 2.25rem;">HISTORIQUES DES ACTIONS</span>
+    </div>
+    <div class="card-body pt-0 pb-5">
+        <div class="table-responsive" role="tabpanel">
+            <table id="kt_datatable_mission_historique" class="table gy-5" {{ stimulus_target('historique--index','datatable') }}>
+                <thead>
+                <tr class="fw-bold fs-6 text-muted">
+                    <th>Message</th>
+                    <th>Par</th>
+                    <th>Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for historique in mission.historiques %}
+                    <tr>
+                        <td data-bs-toggle="tooltip" data-bs-placement="left" data-bs-custom-class="tooltip-dark" title="{{ historique.message }}">{{ historique.message|u.truncate(60, '...') }}</td>
+                        <td>{{ historique.user.firstname }} {{ historique.user.lastname }}</td>
+                        <td>{{ historique.createdAt|date('d/m/Y H:i:s') }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>

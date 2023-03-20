@@ -1,0 +1,100 @@
+@import "components/colors";
+@import "components/buttons";
+@import "components/icons";
+@import "components/checkbox";
+@import "components/images";
+@import "components/cards";
+@import "pages/login";
+@import "pages/clients/index";
+@import "pages/clients/handle";
+@import "pages/subcontractors/index";
+//@import "pages/orders/index";
+//@import "pages/orders/handle_mission";
+@import "pages/company/handle";
+@import "pages/company/index";
+@import "pages/campaigns/index";
+@import "pages/job/index";
+@import "pages/process/index";
+@import "pages/campaigns/handle_mission";
+@import "pages/campaigns/recap";
+@import "pages/accounting/index";
+@import "pages/emailTemplate/index";
+@import "components/text";
+
+body {
+    font-family: "Titillium Web", sans-serif;
+}
+
+.aside-menu{
+  top: 0px!important;
+}
+
+.header-custom{
+  align-items: center;
+  position: fixed;
+  height: 74px;
+  transition: left 0.3s ease;
+  z-index: 100;
+  border-bottom: 0;
+  top: 30px;
+  right: 0;
+  left: 0;
+}
+.font-weight-bold{
+  font-weight: bold!important;
+}
+.form-check {
+    margin-top: 20px;
+}
+.checkbox-custom{
+  border: none!important;
+}
+#user_company_users{
+  display: none;
+}
+
+#toast-container > div {
+    width: 450px !important;
+}
+
+.toast .toast-message {
+    font-size: 1.5rem;
+}
+
+.text-italic {
+    font-style: italic;
+}
+.page-item.active .page-link{
+    background-color: $color-blue-custom;
+}
+.btn-blue-custom{
+    background-color: $color-blue-custom;
+}
+.text-pink {
+    color: #F975C4 !important;
+}
+#table_order_view .input-group .form-check-input.form-control {
+    text-align: center;
+    font-weight: bold;
+}
+
+#table_order_view .input-group .input-group-text {
+    padding: 5px!important;
+}
+
+#table_order_view .input-group .form-check-input {
+    padding: 2px!important;
+}
+
+.invalid-feedback-resale .invalid-feedback {
+    display: unset!important;
+}
+#kt_aside_mobile_toggle{
+    margin-top: 40px!important;
+}
+@media screen and (max-width: 1200px) {
+    #table_order_view .input-group .input-group-text {
+        padding: 5px 19px!important;
+        border-radius: unset;
+    }
+}

@@ -1,0 +1,25 @@
+{% for service in servicesSubContractor %}
+    <div class="modal fade" id="deleteDoc{{ service.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form method="post" action="{{ path('service_remove', {'id': service.id}) }}" class="d-inline" id="{{ service.id }}">
+                <div class="modal-content">
+                    <div class="modal-header custom-header">
+                        <h5 class=" text-center">RETIRER LE SERVICE</h5>
+                        <button class="btn btn-sm btn-light custom-mr btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-accept1">Voulez-vous vraiment supprimé ce service ?</p>
+                        <p class="text-accept1"> <b>Service:</b> {{ service.product.name }}</p>
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ service.id) }}">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-primary-custom" name="deleteServiceTrainer{{ service.id }}">Retirer</button>
+                    </div>
+                </div>
+                <input type="hidden" name="productId" value="{{ service.id }}">
+            </form>
+        </div>
+    </div>
+{% endfor %}

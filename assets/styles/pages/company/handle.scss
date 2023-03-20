@@ -1,0 +1,43 @@
+@import "~@tarekraafat/autocomplete.js/dist/css/autoComplete.02.css";
+
+.autoComplete_wrapper {
+    display: block !important;
+
+    & > input {
+        display: block;
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-size: 1.1rem;
+        font-weight: 500;
+        line-height: 1.5;
+        color: #181C32;
+        background-color: #ffffff;
+        background-clip: padding-box;
+        border: 1px solid #E4E6EF;
+        appearance: none;
+        border-radius: 0.475rem;
+        box-shadow: inset 0 1px 2px rgb(0 0 0 / 8%);
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        background-image: none!important;
+    }
+}
+.createAndAdd:hover{
+    background-color: $color-current-step-workflow!important;
+}
+.new-contrat{
+    margin-right: auto;
+    margin-left: 150px;
+}
+.label-credit-history{
+    margin-left: 9.5rem;
+}
+@media screen and (max-width: 425px) {
+    .img-custom-w{
+        width: 100px!important;
+        height: 100px!important;
+    }
+    .image-input [data-kt-image-input-action=change]{
+        top: 15px!important;
+        right: 15px!important;
+    }
+}

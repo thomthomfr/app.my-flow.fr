@@ -1,0 +1,15 @@
+twig:
+    default_path: '%kernel.project_dir%/templates'
+    form_themes: [ 'form_themes/form_error.html.twig' ]
+    paths:
+        'templates/email': 'email'
+    globals:
+        front_website_url: '%env(resolve:FRONT_WEBSITE_URL)%'
+    number_format:
+        decimals: 2
+        decimal_point: ','
+        thousands_separator: ' '
+
+when@test:
+    twig:
+        strict_variables: true

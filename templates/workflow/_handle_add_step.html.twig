@@ -1,0 +1,80 @@
+<div class="row mt-5" id="bottom">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-3 pe-0">
+                <div class="card shadow">
+                    <div class="card-body text-center p-0">
+                        <button type="button"
+                                class="btn btn-icon"
+                            {{ stimulus_action('workflow--handle', 'addStep') }}>
+                            <i class="fas fs-1 fa-plus-circle"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="offset-3 col-6 d-none add-step-card" {{ stimulus_target('workflow--handle', 'addStepCard') }}>
+                {{ form_start(addStepForm, {attr:{'data-workflow--handle-target':'addStepForm'}}) }}
+                <div class="card shadow card-add-step">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-5 col-add-step">
+                                <div class="form-group row">
+                                    <div class="col-12">
+                                        {{ form_row(addStepForm.name, {'attr':{'class':'form-control mb-5', 'data-workflow--handle-target':'addStepNameInput'}}) }}
+                                    </div>
+                                </div>
+                                <div class="row d-flex align-items-baseline">
+                                    {{ form_label(addStepForm.completionTime) }}
+                                    <div class="col-4">
+                                        {{ form_widget(addStepForm.completionTime, {'attr':{'class':'form-control mb-5', 'data-workflow--handle-target':'addStepCompletionTimeInput'}}) }}
+                                    </div>
+                                    Jours ouvrés
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-12">
+                                        {{ form_row(addStepForm.manager, {'attr':{'class':'form-control mb-5', 'data-workflow--handle-target':'addStepManagerInput'}}) }}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-12">
+                                        {{ form_row(addStepForm.job, {'attr':{'class':'form-control mb-5', 'data-workflow--handle-target':'addStepJobInput'}}) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                {{ form_row(addStepForm.customerDescription, {'label_attr':{'data-workflow--handle-target':'addStepCustomerDescriptionInput'}, 'attr':{'class':'form-control mb-5', 'data-workflow--handle-target':'addStepCustomerDescriptionInput'}}) }}
+                                {{ form_row(addStepForm.supplierDescription, {'label_attr':{'data-workflow--handle-target':'addStepSupplierDescriptionInput'}, 'attr':{'class':'form-control mb-5', 'data-workflow--handle-target':'addStepSupplierDescriptionInput'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer d-flex justify-content-end">
+                        <a
+                            class="d-none btn btn-danger"
+                            {{ stimulus_target('workflow--handle', 'deleteStepButton') }}
+                            onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette étape ?')"
+                        >
+                            Supprimer
+                        </a>
+                        <button
+                            type="button"
+                            class="btn btn-primary-custom ms-3 me-3"
+                            {{ stimulus_action('workflow--handle', 'submitAddStepForm') }}
+                        >
+                            <span class="indicator-label">
+                                Enregistrer
+                            </span>
+                            <span class="indicator-progress">
+                                Enregistrement en cours... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            </span>
+                        </button>
+                        <button type="button" class="btn btn-secondary" {{ stimulus_action('workflow--handle', 'addStep') }}>Annuler</button>
+                    </div>
+                </div>
+                    {{ form_widget(addStepForm.stepId, {'attr':{'data-workflow--handle-target':'hiddenStepId'}}) }}
+                {{ form_end(addStepForm) }}
+            </div>
+        </div>
+    </div>
+</div>

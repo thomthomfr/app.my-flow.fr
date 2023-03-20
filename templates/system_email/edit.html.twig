@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Modifier l'email "{{ email.title }}"
+{% endblock %}
+
+{% block body %}
+    <div id="kt_content_container" class="container-fluid" {{ stimulus_controller('system-email--handle') }}>
+        {{ form_start(form, {'attr':{'novalidate':'novalidate','data-system-email--handle-target':'form'}}) }}
+        <div class="titre-header">
+            <h1>Email système</h1>
+            <div>
+                <a href="{{ path('system_email_index') }}" class="btn btn-secondary">Retour</a>
+            </div>
+        </div>
+        <div class="tab-content mt-5">
+            <div class="card pt-4 mb-6 mb-xl-9">
+                <div class="card-body pt-0 pb-5">
+                    <span class="font-weight-bold">1. Détails email</span>
+                    <div class="form-group row mb-8 mt-5">
+                        {{ form_label(form.title, null, {'label_attr':{'class':'col-xl-2 col-lg-2 col-form-label'}}) }}
+                        <div class="col-lg-3 col-xl-3">
+                            {{ form_widget(form.title, {'attr':{'class':form.title.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                            {{ form_errors(form.title) }}
+                        </div>
+                    </div>
+                    <div class="form-group row mb-8">
+                        {{ form_label(form.sender, null, {'label_attr':{'class':'col-xl-2 col-lg-2 col-form-label'}}) }}
+                        <div class="col-lg-3 col-xl-3">
+                            {{ form_widget(form.sender, {'attr':{'class':form.sender.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                            {{ form_errors(form.sender) }}
+                        </div>
+                    </div>
+                    <div class="form-group row mb-8">
+                        {{ form_label(form.senderName, null, {'label_attr':{'class':'col-xl-2 col-lg-2 col-form-label'}}) }}
+                        <div class="col-lg-3 col-xl-3">
+                            {{ form_widget(form.senderName, {'attr':{'class':form.senderName.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                            {{ form_errors(form.senderName) }}
+                        </div>
+                    </div>
+                    <div class="form-group row mb-8">
+                        {{ form_label(form.subject, null, {'label_attr':{'class':'col-xl-2 col-lg-2 col-form-label'}}) }}
+                        <div class="col-lg-3 col-xl-3">
+                            {{ form_widget(form.subject, {'attr':{'class':form.subject.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                            {{ form_errors(form.subject) }}
+                        </div>
+                    </div>
+                    <div class="form-group row mb-8">
+                        {{ form_label(form.content, null, {'label_attr':{'class':'col-xl-2 col-lg-2 col-form-label'}}) }}
+                        <div class="col-lg-5 col-xl-5">
+                            {{ form_widget(form.content, {'attr':{'class':form.content.vars.errors|length ? 'form-control is-invalid':'form-control','data-system-email--handle-target':'tinyMCE'}}) }}
+                            {{ form_errors(form.content) }}
+                        </div>
+                        {{ include('email_template/_shortcodes.html.twig') }}
+                    </div>
+                    <div class="form-group row mb-8">
+                        {{ form_label(form.smsContent, null, {'label_attr':{'class':'col-xl-2 col-lg-2 col-form-label'}}) }}
+                        <div class="col-lg-5 col-xl-5">
+                            {{ form_widget(form.smsContent, {'attr':{'class':form.smsContent.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                            {{ form_errors(form.smsContent) }}
+                        </div>
+                    </div>
+                    <span class="font-weight-bold">2. Etat</span>
+                    <div class="form-group row mb-8">
+                        {{ form_label(form.active, null, {'label_attr':{'class':'col-xl-2 col-lg-2 col-form-label checkbox-custom-label'}}) }}
+                        <div class="col-lg-5 col-xl-5">
+                            <div class="form-check form-switch form-check-custom form-check-solid">
+                                {{ form_widget(form.active) }}
+                                {{ form_label(form.active, null) }}
+                            </div>
+                        </div>
+                    </div>
+                    <button
+                        type="button"
+                        class="btn btn-primary-custom"
+                        data-kt-stepper-action="submit"
+                        {{ stimulus_action('system-email--handle', 'submitForm') }}
+                    >
+                        <span class="indicator-label">
+                            Enregistrer
+                        </span>
+                        <span class="indicator-progress">
+                            Enregistrement en cours... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

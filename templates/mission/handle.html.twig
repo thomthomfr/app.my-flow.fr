@@ -1,0 +1,117 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mission {{ mission.reference }}{% endblock %}
+{% block styles %}
+    {{ encore_entry_link_tags('plugins/custom/datatables/datatables.bundle') }}
+{% endblock %}
+{% block body %}
+    <div id="kt_content_container" class="container-fluid">
+        <div>
+            <div class="card mb-5">
+                <div class="card-body padding-custom-header">
+                    <div class="titre-header2 d-flex">
+                        <h1>
+                            <a href="{{ path('mission_index') }}" class="btn btn-custom-retour2">Retour</a>
+                            Campagne {{ mission.campaign.name|raw }} {% if mission.reference is not empty %}({{ mission.reference }}){% endif%} {% if mission.campaign.company is not empty %}- ({{ mission.campaign.company.name }}){% endif %} {% if mission.campaign.missions|length > 1 %}- <span class="type-mission">{{ mission.product.name }}</span>{% endif %}
+                            <br>
+                            <div class="d-flex statut-in-mission">
+                                <span class="fs-4 espace-statut">Statut de la campagne</span>
+                                {% if mission.campaign.state == 'provisional' %}
+                                    <div class="progress progress-detail">
+                                        <div class="progress-bar progress-bar-provisoire bg-custom-blue" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="100" aria-valuemax="100">PROVISOIRE</div>
+                                    </div>
+                                {% elseif mission.campaign.state == 'waiting' %}
+                                    <div class="progress progress-detail">
+                                        <div class="progress-bar progress-bar-provisoire bg-custom-blue" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="100" aria-valuemax="100">EN ATTENTE D'EVALUATION</div>
+                                    </div>
+                                {% elseif mission.campaign.state == 'waiting_activated' %}
+                                    <div class="progress progress-detail">
+                                        <div class="progress-bar progress-bar-provisoire bg-custom-blue" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="100" aria-valuemax="100">EN ATTENTE D'ACTIVATION</div>
+                                    </div>
+                                {% elseif mission.campaign.state == 'in_progress' %}
+                                    <div class="progress progress-detail">
+                                        <div class="progress-bar progress-bar-valide" role="progressbar" style="width: {% if campaign.progress == 0 %}10{% else %}{{ campaign.progress }}{% endif %}%;" aria-valuenow="{{ campaign.progress }}" aria-valuemin="0" aria-valuemax="100">{{ campaign.progress }}%</div>
+                                    </div>
+                                {% elseif mission.campaign.state == 'paused' %}
+                                    <div class="progress progress-detail">
+                                        <div class="progress-bar progress-bar-provisoire bg-warning" role="progressbar" style="width: 100%;" aria-valuenow="{{ campaign.progress }}" aria-valuemin="0" aria-valuemax="100">EN PAUSE</div>
+                                    </div>
+                                {% elseif mission.campaign.state == 'archived'%}
+                                    <div class="progress progress-detail">
+                                        <div class="progress-bar progress-bar-finish" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">ARCHIVEE</div>
+                                    </div>
+                                {% endif%}
+                            </div>
+                        </h1>
+                        <span class="guide">
+                            {% if mission.campaign.company.contract == 1 or mission.campaign.company.contract == 2 %}
+                            <button type="button" class="btn btn-sm"
+                                    data-kt-menu-trigger="click"
+                                    data-kt-menu-placement="bottom-start">
+                            <i class="far fa-clock icon-gestion-temps"></i>
+                                <span class="gestion-temps">Gestion du temps</span>
+                        </button>
+                            {% endif %}
+                        <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-200px py-4"
+                             data-kt-menu="true">
+                             <div class="menu-item px-3">
+                                 <a data-bs-toggle="modal" data-bs-target="#modal_temps_initial" class="menu-link px-3">
+                                     Temps initial
+                                 </a>
+                             </div>
+                            <div class="menu-item px-3">
+                                <a data-bs-toggle="modal" data-bs-target="#modal_temps_reel_passer" class="menu-link px-3">
+                                    Temps réel passé
+                                </a>
+                            </div>
+                        </div>
+                            <span class="info-general"><i class="far fa-question-circle"></i><a data-bs-toggle="modal" data-bs-target="#kt_modal_1">Informations générales</a></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-column flex-xl-row mb-5">
+                <div class="flex-column flex-lg-row-fluid col-xl-6 col-md-12">
+                    <div {{ stimulus_controller('message--handle') }}>
+                        {{ include('mission/_chat.html.twig') }}
+                    </div>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="kt_contact_view_overview_tab" role="tabpanel">
+                            <div {{ stimulus_controller('historique--index') }}>
+                                {{ include('mission/_historique.html.twig') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-lg-row-fluid">
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="kt_contact_view_overview_tab" role="tabpanel" {{ stimulus_controller('order--index') }}>
+                            {{ include('mission/_planning.html.twig') }}
+                            <div class="d-flex flex-column flex-xl-row">
+                                <div class="flex-column flex-lg-row-fluid">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            {{ include('mission/_demande_initial.html.twig') }}
+                                        </div>
+                                        <div class="col-sm-6">
+                                            {{ include('mission/_participant.html.twig') }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="resumer mt-5">
+                                <div>
+                                    {{ include('mission/_resumer_command.html.twig') }}
+                                    {{ include('mission/_modal_initial_time.html.twig') }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ include('mission/_modal_info_general.html.twig') }}
+    {{ include('mission/_modal_desired_delivery.html.twig') }}
+    {{ include('mission/_modal_gestion_temps.html.twig') }}
+{% endblock %}

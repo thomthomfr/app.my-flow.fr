@@ -1,0 +1,27 @@
+<div class="modal fade" tabindex="-1" id="cancelMissionModal" {{ stimulus_target('order--index', 'cancelMissionModal') }}>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            {{ form_start(formCancelMission, {'attr':{'data-order--index-target':'cancelMissionForm'}}) }}
+            <div class="modal-header custom-header">
+                <h5 class=" text-center">ANNULER LA MISSION</h5>
+                <button class="btn btn-sm btn-light custom-mr btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p class="text-accept1 text-black">Etes-vous sur de vouloir annuler la mission ?</p>
+                {{ form_label(formCancelMission.cancelReason, null, {'label_attr': {'class':'form-label'}}) }}
+                {{ form_widget(formCancelMission.cancelReason, {'attr': {'class':'form-control form-control-solid'}}) }}
+                {{ form_errors(formCancelMission.cancelReason) }}
+                <div class="bouton-validate">
+                    <button
+                        class="btn btn-green-mission mt-5"
+                    >
+                                <span class="indicator-label">
+                                     Je valide
+                                </span>
+                    </button>
+                </div>
+            </div>
+            {{ form_end(formCancelMission) }}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+<div class="modal fade" tabindex="-1" id="modal_archive_mission">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header custom-header">
+                <h5 class=" text-center">CLOTURER LA MISSION</h5>
+                <button class="btn btn-sm btn-light custom-mr btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body text-center">
+                <p class="text-accept1 text-black">Etes-vous sur de vouloir cloturer</p>
+                <p class="text-accept1 text-black">la mission ? Ceci est définitif</p>
+                <div class="bouton-validate w-auto">
+                    <a
+                        class="btn btn-green-mission mt-5 w-auto"
+                        href="{{ path('mission_transition', {'id': step.workflow.mission.id, 'transition':'archive'}) }}"
+                    >
+                         <span class="indicator-label">
+                              Oui, archiver la mission
+                         </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

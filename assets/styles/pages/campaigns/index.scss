@@ -1,0 +1,170 @@
+.bandeau-table-mission{
+    background-color: $custom-grey-header-tableau;
+}
+.bandeau-table-mission tr th{
+    color: $custom-grey-add-photo;
+}
+.color-content{
+    background-color: $custom-grey-content-tableau;
+}
+.table tr:last-child, .table th:last-child, .table td:last-child{
+    padding-left: 0px;
+}
+
+.arrow:first-child {
+    background: url('https://icons.getbootstrap.com/assets/icons/caret-right-fill.svg') no-repeat 200px;
+    cursor: pointer;
+}
+
+tr.shown .arrow:first-child {
+    background: url('https://icons.getbootstrap.com/assets/icons/caret-down-fill.svg') no-repeat 200px;
+    cursor: pointer;
+}
+.progress-bar-validated{
+    background-color: $color-gold-state-prestataire;
+
+}
+.progress-bar-valide{
+    background-color: $color-green-progress-bar;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+.progress-bar-provisoire{
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+.progress-bar-finish{
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+.progress-detail{
+    height: 1.8rem!important;
+    border-radius: 30px;
+    width: 250px;
+}
+.badge-custom{
+    font-weight: bold;
+    font-size: 15px;
+}
+.badge-custom-red{
+    background-color: $color-state-client-red;
+}
+.state-provider{
+    color: $color-gold-state-prestataire!important;
+}
+.custom-beige{
+    color: $color-beige!important;
+    font-weight: bold!important;
+}
+.circle-custom{
+    width: 10px;
+    margin-top: -2px;
+    margin-right: 5px;
+}
+.date-historique{
+    color: $custom-grey-add-photo!important;
+}
+.tableau-historique{
+    font-size: 15px!important;
+}
+.font-italic{
+    font-style: italic !important;
+    font-size: 14px!important;
+}
+.arrow-click{
+    cursor: pointer;
+}
+.valid-campaign{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.vertical-align{
+    vertical-align: baseline;
+    width: 15%;
+}
+.text-badge{
+    font-size: 1.3em;
+}
+.bg-info-custom{
+    background-color: $bg-blue-badge;
+}
+.custom-facture-attente{
+    color: #04006E;
+}
+.icon-statut{
+    color: #F673B7;
+}
+.padding-custom-quantity{
+    padding-left: 25px;
+}
+.search-center{
+    margin-left: auto;
+    margin-right: auto;
+}
+.custom-flex-end{
+    justify-content: end;
+}
+.btn-add{
+    background-color: $color-pink-custom;
+    color: white;
+    font-weight: bold;
+}
+.btn-save{
+    background-color: $color-blue-exported;
+    color: white;
+    font-weight: bold;
+}
+.header-mission{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.mr-btn-10{
+    margin-right: 10px;
+}
+.badge-primary-myflow{
+    background-color: $color-pink-custom;
+    width: 1.3rem!important;
+    height: 1.3rem!important;
+}
+.icon-finger{
+    margin-right: 3px;
+}
+.bg-state-provider{
+    background-color: #DFDFEB;
+}
+.custom-pos-quantity{
+    height: 25px;
+}
+.color-blue-custom{
+    color: $color-blue-custom !important;
+}
+.income::placeholder{
+    font-weight: bold;
+    color: $color-blue-custom;
+}
+.custom-width-quantity{
+    width: 90%!important;
+    margin-left: auto;
+    margin-right: auto;
+}
+.input-delais{
+    width: 180px;
+}
+@media screen and (max-width: 425px) {
+    .btn-wordpress-and-commande a {
+        width: 100%;
+        margin-top: 5px;
+    }
+    .page-item .page-link i{
+        height: 30px!important;
+        width: 30px!important;
+    }
+}
+.btn-a-definir:hover{
+    text-decoration: underline #F975C4 !important;
+}
+.margin-right-custom{
+    margin-right: 5px!important;
+}

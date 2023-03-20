@@ -1,0 +1,138 @@
+<div class="modal fade" id="buyCredit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" {{ stimulus_controller('company--handle-credit') }}>
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h5 class="modal-title new-contrat" id="exampleModalLabel">NOUVEAU CONTRAT</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" >
+                {{ form_start(form4, {'attr':{'id':'credit_form','data-company--handle-credit-target':'formCredit'}}) }}
+                <div class="form-group row mb-8 mt-8">
+                    <span class="label-credit-history">Type</span>
+                    <div class="col-lg-6 col-xl-6" style="margin-left: auto;margin-right: auto;">
+                        {{ form_widget(form4.typePack, {'attr':{'class':form4.typePack.vars.errors|length ? 'form-control is-invalid':'form-control', 'data-action':'change->company--handle-credit#checkTypePack'}}) }}
+                        {{ form_errors(form4.typePack) }}
+                    </div>
+                </div>
+                <div class="form-group row mt-8" {{ stimulus_target('company--handle-credit', 'credit') }}>
+                    <span class="label-credit-history">Coût du crédit <b>{% if company.createdAt is not empty %}{{ company.costOfDiscountedCredit }}€{% else %}220€{% endif %}</b> HT</span>
+                    <div class="col-lg-6 col-xl-6" style="margin-left: auto;margin-right: auto;">
+                        <div class="input-group mb-5">
+                            {{ form_widget(form4.credit, {'attr':{'class':form4.credit.vars.errors|length ? 'form-control is-invalid':'form-control', 'value':'0'}}) }}
+                            {{ form_errors(form4.credit) }}
+                            <span class="input-group-text" id="basic-addon2">Crédits</span>
+                        </div>
+                    </div>
+                    <span class="label-credit-history">Report</span>
+                    <div class="col-lg-6 col-xl-6" style="margin-left: auto;margin-right: auto;">
+                        <div class="input-group mb-5">
+                            {{ form_widget(form4.report, {'attr':{'class':form4.report.vars.errors|length ? 'form-control is-invalid':'form-control', 'value':'12'}}) }}
+                            {{ form_errors(form4.report) }}
+                            <span class="input-group-text" id="basic-addon2">Mois</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row mb-8 mt-8 d-none" {{ stimulus_target('company--handle-credit', 'mensualite') }}>
+                    <span class="label-credit-history">Coût du TJM <b>{% if company.createdAt is not empty %}{{ company.costOfDiscountedCredit }}€{% else %}220€{% endif %}</b> HT</span>
+                    <div class="col-lg-6 col-xl-6" style="margin-left: auto;margin-right: auto;">
+                        <div class="input-group mb-5">
+                            {{ form_widget(form4.mensualite, {'attr':{'class':form4.mensualite.vars.errors|length ? 'form-control is-invalid':'form-control', 'value':'0'}}) }}
+                            {{ form_errors(form4.mensualite) }}
+                            <span class="input-group-text" id="basic-addon2">€/mois</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row mt-8 d-none" {{ stimulus_target('company--handle-credit', 'annuite') }}>
+                    <span class="label-credit-history">Coût du TJM <b>{% if company.createdAt is not empty %}{{ company.costOfDiscountedCredit }}€{% else %}220€{% endif %}</b> HT</span>
+                    <div class="col-lg-6 col-xl-6" style="margin-left: auto;margin-right: auto;">
+                        <div class="input-group mb-5">
+                            {{ form_widget(form4.annuite, {'attr':{'class':form4.annuite.vars.errors|length ? 'form-control is-invalid':'form-control', 'value':'0'}}) }}
+                            {{ form_errors(form4.annuite) }}
+                            <span class="input-group-text" id="basic-addon2">€/an</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row mb-8">
+                    <div class="col-lg-6 col-xl-6" style="margin-left: auto;margin-right: auto;">
+                        {{ form_label(form4.startDateContract, null, {'label_attr':{'class':'col-xl-12 col-lg-12 col-form-label'}}) }}
+                        {{ form_widget(form4.startDateContract, {'attr':{'class':form4.startDateContract.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                        {{ form_errors(form4.startDateContract) }}
+                    </div>
+                </div>
+                <button
+                        {% if app.request.get('_route') == 'company_new' %}
+                            disabled
+                        {% endif %}
+                        style="margin-right: 15px;margin-left: 165px;"
+                        type="submit"
+                        class="btn btn-primary-custom"
+                        data-kt-stepper-action="submit"
+                        {{ stimulus_action('company--handle-credit', 'submitCreditForm') }}
+                >
+                                                <span class="indicator-label">
+                                                    Commander
+                                                </span>
+                    <span class="indicator-progress">
+                                                    Commande en cours... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                                </span>
+                </button>
+                {{ form_end(form4) }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="createAndAddSubcontractor" aria-labelledby="exampleModalLabel" aria-hidden="true" {{ stimulus_controller('company--add-subcontractor') }}>
+    <div class="modal-dialog" {{ stimulus_controller('company--handle') }}>
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Merci de renseigner les métiers de ce partenaire</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" >
+                {{ form_start(form2, {'attr':{'id':'sub_contractor_form','novalidate':'novalidate','data-company--handle-target':'formSubContractor'}}) }}
+                <div class="row mb-3 align-items-center">
+                    <div class="col">
+                        {{ form_label(form2.jobs, null, {'label_attr':{'class':'col-xl-3 col-lg-3 col-form-label'}}) }}
+                        {{ form_widget(form2.jobs, {'attr':{'class':'form-control','data-company--add-subcontractor-target':'select2'}}) }}
+                        <input type="hidden" id="emailSubContractor" name="emailSubContractor"/>
+                    </div>
+                    <div class="col">
+                        {{ form_label(form2.products, null, {'label_attr':{'class':'col-xl-3 col-lg-3 col-form-label'}}) }}
+                        {{ form_widget(form2.products, {'attr':{'class':'form-control','data-company--add-subcontractor-target':'select2'}}) }}
+                    </div>
+                </div>
+                <div class="row mb-3 align-items-center hide-billing">
+                    <div class="col">
+                        {{ form_label(form2.billingMethod, null, {'label_attr':{'class':'col-xl-6 col-lg-6 col-form-label'}}) }}
+                        {{ form_widget(form2.billingMethod, {'attr':{'class':'form-control','data-company--add-subcontractor-target':'select2'}}) }}
+                    </div>
+                </div>
+                {% if app.request.get('billing') == 1 %}
+                    <p class="text-center d-none zone-perte">Le tarif de revente de ce prestataire est inférieur de <span class="text-danger"><span id="perte"></span>%</span>, nous vous invitons à modifier sa fiche.</p>
+                {% else %}
+                    <p class="text-center d-none zone-perte">Pour le service sélectionné, la marge est de <span class="text-danger"><span id="perte"></span>%</span>, souhaitez vous confirmer l’association ?</p>
+                {% endif %}
+                <button
+                    {% if app.request.get('_route') == 'company_new' %}
+                        disabled
+                    {% endif %}
+                    id="buttonSubContractor"
+                    style="margin-right: 15px;margin-left: 165px;"
+                    type="submit"
+                    class="btn btn-primary-custom"
+                    data-kt-stepper-action="submit"
+
+                >
+                    <span class="indicator-label">
+                        Ajouter
+                    </span>
+                    <span class="indicator-progress">
+                        Ajout en cours... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                    </span>
+                </button>
+                {{ form_end(form2) }}
+            </div>
+        </div>
+    </div>
+</div>

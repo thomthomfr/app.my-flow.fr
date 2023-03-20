@@ -1,0 +1,438 @@
+.text-box-mission{
+    font-weight: bolder;
+    font-size: 17px;
+}
+
+.titre-planning{
+    h3{
+        margin-left: 100px;
+    }
+    .guide{
+        a{
+            margin-right: 15px;
+            color: $blue-text;
+            text-decoration: underline;
+            font-weight: bolder;
+        }
+    }
+}
+.custom-table{
+    img{
+        margin-right: 10px;
+    }
+    span{
+        color: $custom-grey;
+    }
+    font-weight: bolder!important;
+    font-size: 12px!important;
+    vertical-align: middle!important;
+}
+.box-fichier-joints{
+    h3{
+        margin-top: 20px;
+        margin-left: 5px;
+        svg{
+            margin-left: 100px;
+            color: $color-grey-custom;
+        }
+    }
+    padding-left: 15px;
+    border: gray solid 1px;
+    border-color: $grey-fichier-mission;
+    border-radius: 30px;
+
+    button{
+        margin-rigt: 5px!important;
+    }
+    .custom-table2{
+        font-size: 13px!important;
+        vertical-align: middle!important;
+        color: $color-fichier-mission;
+    }
+    .custom-mr{
+        margin-right: 10px!important;
+    }
+}
+.box-fichier-joints-mission{
+    h3{
+        margin-top: 20px;
+        margin-left: 5px;
+        svg{
+            color: $color-grey-custom;
+        }
+    }
+    padding-left: 15px;
+    border: gray solid 1px;
+    border-color: $grey-fichier-mission;
+    border-radius: 30px;
+
+    button{
+        margin-rigt: 5px!important;
+    }
+    .custom-table2{
+        font-size: 13px!important;
+        vertical-align: middle!important;
+        color: $color-fichier-mission;
+    }
+    .custom-mr{
+        margin-right: 10px!important;
+    }
+}
+.custom-separator{
+    border-bottom: $grey-fichier-mission solid 1px!important;
+}
+.workflow{
+    height: 250px;
+    border-top: $grey-fichier-mission solid 2px!important;
+    color: white;
+    font-weight: bold!important;
+    overflow-x: scroll;
+    overflow-y: scroll;
+    white-space: nowrap;
+    position: relative;
+
+    .step-workflow{
+        float: none;
+        display: inline-block;
+        width: 30%;
+        border-right: $grey-fichier-mission solid 2px;
+        height: 265px;
+        text-align: center;
+        padding-left: 0px!important;
+        padding-right: 0px!important;
+        .zone-btn-workflow{
+            button{
+                margin-top: 5px;
+                margin-left: 10px!important;
+                padding: 10px!important;
+            }
+        }
+        .cadre-step-workflow{
+            background-color: $color-step-workflow;
+            border-radius: 12px;
+            height: auto;
+            padding-top: 7px;
+            cursor: pointer;
+        }
+        .cadre-step-workflow:hover{
+            background-color: $color-blue-exported;
+            transition: 0.3s;
+        }
+
+        $current-size: 1;
+        $sizes: 10;
+
+        @while $current-size <= $sizes {
+            .step-#{$current-size} {
+                position: relative;
+                top: 35px * $current-size;
+            }
+            $current-size: $current-size + 1;
+        }
+
+        .active {
+            background-color: $color-current-step-workflow;
+        }
+
+        $current-size: 1;
+        $sizes: 10;
+
+        @while $current-size <= $sizes {
+            .zone-btn-workflow-#{$current-size} {
+                position: absolute;
+                margin-top: 40px * $current-size;
+                margin-left: 10px * $current-size;
+            }
+            $current-size: $current-size + 1;
+        }
+    }
+    .last-step-workflow{
+        text-align: center;
+        padding-left: 0px!important;
+        padding-right: 0px!important;
+        .cadre-step-workflow{
+            background-color: $color-step-workflow;
+            border-radius: 12px;
+            height: 35px;
+            padding-top: 7px;
+        }
+        .step-5{
+            margin-top: 170px;
+        }
+    }
+}
+.info-time{
+    margin-bottom: 10px;
+    margin-top: 10px;
+    span{
+        color: $color-gray;
+    }
+}
+.card-no-padding{
+    padding: 8px!important;
+}
+.btn-custom-retour2{
+    background-color: $color-btn-gray;
+    font-weight: bolder;
+    color: $color-text-gray-btn;
+}
+.padding-custom-header{
+    padding: 15px!important;
+    padding-bottom: 10px!important;
+}
+.titre-header2{
+    justify-content: space-between;
+    .guide{
+        .info-general{
+            i{
+                margin-right: 5px;
+                font-size: 20px;
+                vertical-align: middle;
+            }
+            a{
+                color: $blue-text;
+                text-decoration: underline;
+                font-weight: bolder;
+                margin-right: 10px;
+                cursor: pointer;
+            }
+        }
+    }
+}
+.section-btn-chat-mission{
+    border-top: $grey-fichier-mission solid 1px;
+    justify-content: space-between;
+}
+.my-message-box{
+    .me{
+        .my-files{
+            padding-left: 15px;
+            padding-right: 15px;
+            border: gray solid 1px;
+            border-color: $grey-fichier-mission;
+            border-radius: 30px;
+            width: 75%;
+            .custom-table2{
+                color: $color-fichier-mission;
+            }
+        }
+        .my-identity{
+            b{
+                img{
+                    margin-right: 5px;
+                }
+            }
+            span{
+                margin-left: 220px;
+                color: $color-gray;
+                font-size: 11px;
+            };
+        }
+        .my-message{
+            background-color: #E8E9FE;
+            padding: 15px;
+            border-radius: 10px;
+            width: 75%;
+        }
+    }
+}
+.you-message-box{
+    display: flex;
+    justify-content: end;
+    .you{
+        .you-files{
+            padding-left: 15px;
+            padding-right: 15px;
+            border: gray solid 1px;
+            border-color: $grey-fichier-mission;
+            border-radius: 30px;
+            width: 100%;
+            .custom-table2{
+                color: $color-fichier-mission;
+            }
+        }
+        .you-identity{
+            b{
+                img{
+                    margin-right: 5px;
+                }
+            }
+            span{
+                margin-left: 220px;
+                color: $color-gray;
+                font-size: 11px;
+            };
+        }
+        .you-message{
+            background: linear-gradient(to left, $cadre-you-chat, $cadre-you-chat-degrade);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            width: 100%;
+        }
+    }
+}
+.box-chat{
+    border-top: $grey-fichier-mission solid 1px;
+    border-bottom: $grey-fichier-mission solid 1px;
+}
+.custom-header{
+    justify-content: space-evenly!important;
+    margin-left: 36px!important;
+    button{
+        margin-left: 100px;
+    }
+    h5{
+        margin-left: 100px;
+    }
+}
+.modal-content-custom{
+    .info-post{
+        margin-bottom: 25px;
+        b{
+            img{
+                margin-right: 5px;
+            }
+        }
+    }
+    position: relative;
+    top: 65px;
+    left: 525px;
+    p{
+        font-size: 12px;
+        margin-left: 30px;
+    }
+}
+.modal-footer-custom{
+    position: relative;
+    top: -15px;
+    left: 330px;
+}
+.text-refus1{
+    font-size: 20px;
+}
+.text-accept1{
+    font-size: 20px;
+}
+.color-grey-close{
+    color: $color-gray;
+}
+.content-chatbox{
+    border: none;
+}
+.type-mission{
+    font-size: 0.7em;
+}
+.changeDesiredDelivery{
+    cursor: pointer;
+    color: #808080FF;
+}
+.changeTempsReel{
+    cursor: pointer;
+    color: #808080FF;
+}
+.icon-gestion-temps{
+    font-size: 20px!important;
+}
+.gestion-temps{
+    color: #97ABF4;
+    text-decoration: underline;
+    font-weight: bolder;
+    margin-right: 10px;
+    cursor: pointer;
+    font-size: 13px;
+}
+.btn-none{
+    .btn:active{
+        box-shadow: none;
+    }
+    .btn:active:focus{
+        box-shadow: none;
+    }
+    .btn:focus{
+        box-shadow: none;
+        outline: none;
+    }
+}
+.guide{
+    margin-right: 15px;
+    margin-bottom: 35px;
+}
+.card-info-mission{
+    border-bottom: #EDF4FC solid 2px !important;
+}
+.revenu-time{
+    color: #A1A5B7;
+}
+.statut-in-mission{
+    margin-left: 90px;
+}
+.espace-statut{
+    margin-right: 15px;
+}
+.you{
+    .my-message{
+        background-color: #D6E8FF;
+        padding: 15px;
+        border-radius: 10px;
+        width: 100%;
+    }
+}
+.form_manuel{
+    width: 70px;
+    position: relative;
+    left: 220px;
+    top: -33px;
+}
+.nav-product{
+    border-right: 1px solid #A1A5B7;
+    border-left: 1px solid #A1A5B7;
+    border-top: 1px solid #A1A5B7;
+    border-bottom: 1px solid #A1A5B7;
+    border-radius: 5px 5px 0px 0px;
+    background-color: white;
+    position: relative;
+    top: -15px;
+    left: 1px;
+}
+.active-blue{
+    background-color: #04006E!important;
+    a{
+        color: white!important;
+        font-weight: bold!important;
+    }
+}
+.arrow-right-refuse-step{
+    font-size: 1.5em!important;
+    position: relative;
+    top: -2px;
+}
+.arrow-right-validate-step{
+    font-size: 1.5em!important;
+    color: white!important;
+    position: relative;
+    top: -2px;
+}
+.btn-refuse-step{
+    width: 6rem;
+    height: 3rem;
+    margin-right: 20px;
+}
+.btn-validate-step{
+    width: 6rem;
+    height: 3rem;
+}
+.card-name-product{
+    height: 30px;
+}
+.separator-product{
+    margin: 0;
+    position: relative;
+    top: -4px;
+    height: 2px!important;
+    color: #A1A5B7;
+}
+.nav-product-link{
+    color: #A1A5B7;
+    font-size: 18px;
+}

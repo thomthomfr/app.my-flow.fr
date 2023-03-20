@@ -1,0 +1,53 @@
+@import "~official-fontface/src/scss/companies/hyundai";
+
+.hyundai-sans-head-light {
+    font-family: "HyundaiSansHead";
+    font-weight: 300;
+    font-style: normal;
+}
+
+.titillium-web-bold {
+    font-family: 'Titillium Web', sans-serif;
+    font-weight: 600;
+}
+
+.pt-lg-40 {
+    padding-top: 10rem !important;
+}
+@media screen and (max-device-width: 991px) {
+  .left-login{
+    width: 100%!important;
+  }
+  .custom-card-body{
+    width: 100%!important;
+  }
+  .btn-login{
+    width: 150px!important;
+  }
+}
+.right-login{
+  background-color: #F1F5F8;
+}
+.custom-card-body{
+  width: 690px;
+  box-shadow: 0 0 30px 15px #d0d0d0;
+  overflow: hidden;
+  border-radius: 10px ! important;
+}
+
+.block-mdp-lost{
+  margin-top: 45px;
+  .mdp-lost{
+    color: darkgrey;
+  }
+}
+.position-center{
+  display: flex;
+  justify-content: center;
+}
+.custom-input-size{
+  width: 400px;
+}
+input:checked[type=checkbox]{
+    background-color: $color-pink-custom!important;
+}

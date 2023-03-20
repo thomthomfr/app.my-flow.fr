@@ -1,0 +1,31 @@
+<div class="modal fade" tabindex="-1" {{ stimulus_target('subContractor--handle', 'editCompanyJobsModal') }}>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            {{ form_start(form2, {'attr':{'novalidate':'novalidate','data-subContractor--handle-target':'editCompanyJobsForm'}}) }}
+            <div class="modal-header">
+                <h5 class="modal-title">Modifier l'association au client</h5>
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <span class="svg-icon svg-icon-2x"></span>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-3 align-items-center">
+                    <div class="col">
+                        {{ form_label(handleCompanyJobsForm.jobs, null, {'label_attr':{'class':'col-xl-3 col-lg-3 col-form-label'}}) }}
+                        {{ form_widget(handleCompanyJobsForm.jobs, {'attr':{'class':handleCompanyJobsForm.jobs.vars.errors|length ? 'form-control is-invalid':'form-control', 'data-subContractor--handle-target':'editCompanyJobsFormInput select2'}}) }}
+                    </div>
+                    <div class="col">
+                        {{ form_label(handleCompanyJobsForm.products, null, {'label_attr':{'class':'col-xl-3 col-lg-3 col-form-label'}}) }}
+                        {{ form_widget(handleCompanyJobsForm.products, {'attr':{'class':handleCompanyJobsForm.products.vars.errors|length ? 'form-control is-invalid':'form-control', 'data-subContractor--handle-target':'editCompanyProductsFormInput select2'}}) }}
+                    </div>
+                </div>
+                {% do handleCompanyJobsForm.billingMethod.setRendered() %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-custom-retour" data-bs-dismiss="modal">Fermer</button>
+                <button type="submit" class="btn btn-primary-custom" data-bs-dismiss="modal">Modifier</button>
+            </div>
+            {{ form_end(handleCompanyJobsForm) }}
+        </div>
+    </div>
+</div>

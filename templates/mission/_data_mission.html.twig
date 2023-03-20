@@ -1,0 +1,232 @@
+<table style="box-shadow: -3px 4px 12px #e1e2e3;">
+    <thead class="bandeau-table-mission w-100">
+    <tr class="fw-bold fs-6 text-muted">
+        <th class="text-center font-weight-bold" style="padding-left: 10px; width: 100px;">Ref.</th>
+        <th class="text-center font-weight-bold" style="width: 200px;">Type de mission</th>
+        <th class="text-center font-weight-bold" style="width: 200px;">Quantité</th>
+        <th class="text-center font-weight-bold {% if is_granted('ROLE_CLIENT') %}d-none{% endif %}" style="width: 200px;">Revenu estimé</th>
+        <th class="text-center font-weight-bold {% if is_granted('ROLE_CLIENT') %}d-none{% endif %}" style="width: 200px;">Délais (min)</th>
+        <th class="text-center font-weight-bold" style="width: 200px;">Statut client</th>
+        <th class="text-center font-weight-bold" style="width: 200px;">Statut prestataire</th>
+        <th class="text-center font-weight-bold" style="width: 150px;">Planning</th>
+        <th class="text-center font-weight-bold" style="width: 200px;">Equipe(s)</th>
+        <th class="text-center font-weight-bold" style="width: 200px;">Livraison souhaitée</th>
+        <th class="text-center font-weight-bold" style="width: 100px;"></th>
+    </tr>
+    </thead>
+    <tbody class="color-content">
+    {% for mission in campaign.missions|filter(m => m.state != 'archived' and m.state != 'cancelled') %}
+        {% set authorized = false %}
+        {% for participant in mission.participants %}
+            {% if app.user.id == participant.user.id %}
+                {% set authorized = true %}
+            {% endif %}
+        {% endfor %}
+
+        {% if not is_granted('ROLE_SUBCONTRACTOR') or authorized %}
+            <tr>
+                <td class="text-center" style="padding-left: 10px;">
+                    {{ mission.reference }}
+                </td>
+                <td class="text-center color-blue-custom">
+                    <strong><a href="{{ path('mission_edit', {'id':mission.id}) }}" class="text-black" {{ stimulus_target('order--index','product') }}>{{ mission.product.name }} </a></strong>
+                </td>
+                <td class="text-center col-1">
+                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_CLIENT') or is_granted('ROLE_CLIENT_ADMIN') %}
+                        {{ form_start(formMissionQuantity)}}
+                            <div class="input-group custom-width-quantity">
+                                <span  id="{{ mission.id }}" class="input-group-text cursor-pointer custom-pos-quantity" data-direction="down" data-url="{{ path('mission_change_quantity', {'id':mission.id}) }}" data-input-id="{{ formMissionQuantity.vars.id }}-{{ mission.id }}" data-action="click->order--index#changeQuantity" data-campaign-id="{{ mission.campaign.id }}">-</span>
+                                <input type="text" id="{{ formMissionQuantity.vars.id }}-{{ mission.id }}" name="{{ formMissionQuantity.vars.full_name }}" class="form-check-input form-control mt-0 custom-pos-quantity" value="{{ mission.quantity }}" >
+                                <span  id="{{ mission.id }}" class="input-group-text cursor-pointer custom-pos-quantity" data-direction="up" data-url="{{ path('mission_change_quantity', {'id':mission.id}) }}" data-input-id="{{ formMissionQuantity.vars.id }}-{{ mission.id }}" data-action="click->order--index#changeQuantity" data-campaign-id="{{ mission.campaign.id }}">+</span>
+                                {% do formMissionQuantity.quantity.setRendered() %}
+                            </div>
+                        {{ form_end(formMissionQuantity)}}
+                    {% else %}
+                        {{ mission.quantity }}
+                    {% endif %}
+                </td>
+                <td class="text-center {% if is_granted('ROLE_CLIENT') %}d-none{% endif %}">
+                    {% if is_granted('ROLE_ADMIN') %}
+                        {% if mission.adminIncome is empty %}
+                            <a class="cursor-pointer btn-a-definir" {{ stimulus_action('order--index','addTime','click') }} data-url="{{ path('mission_admin_set_initial_time', {'id':mission.id}) }}" data-name="{{ mission.product.name }}"><span class="text-my-flow font-weight-bold">À définir</span></a>
+                        {% else %}
+                            <span class="color-blue-custom font-weight-bold">{{ mission.adminIncome }}€</span>
+                        {% endif %}
+                    {% else %}
+                        {% if mission.product.type == constant('\\App\\Enum\\ProductType::AU_FORFAIT') and app.user.billingMethod == 2 %}
+                            {% for service in app.user.services %}
+                                {% if service.product == mission.product %}
+                                    <span class="color-blue-custom font-weight-bold">{{ service.price }} €</span>
+                                {% endif %}
+                            {% endfor %}
+                        {% elseif estimatedIncome is not empty %}
+                            {% for income in estimatedIncome %}
+                                {% if income and mission.id == income.mission.id and income.estimatedIncome is not empty %}
+                                    <span class="color-blue-custom font-weight-bold">{{ income.estimatedIncome }} €</span>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endif %}
+                </td>
+                <td class="text-center {% if is_granted('ROLE_CLIENT') %}d-none{% endif %} input-delais">
+                    {% if is_granted('ROLE_ADMIN') %}
+                        {% if mission.adminTime is empty %}
+                            <a class="cursor-pointer btn-a-definir" {{ stimulus_action('order--index','addTime','click') }} data-url="{{ path('mission_admin_set_initial_time', {'id':mission.id}) }}" data-name="{{ mission.product.name }}"><span class="text-my-flow font-weight-bold">À définir</span></a>
+                        {% else %}
+                            <span class="color-blue-custom font-weight-bold">{{ mission.adminTime }} minute(s)</span>
+                        {% endif %}
+                    {% else %}
+                        {% for income in estimatedIncome %}
+                            {% if app.user.billingMethod == 1 %}
+                                {% set tauxHoraire = app.user.dailyRate %}
+                            {% else %}
+                                {% set tauxHoraire = app.user.dailyRate %}
+                                {% for service in app.user.services|filter(s => s.product == mission.product) %}
+                                    {% set tauxHoraire = service.price %}
+                                {% endfor %}
+                            {% endif %}
+                            {% if income and mission.id == income.mission.id %}
+                                {% if income.mission.product.type.value == 1 %}
+                                    <div class="{% if not is_granted('ROLE_ADMIN') %}d-flex{% endif %}">
+                                        <div class="group-timer">
+                                            {{ form_start(formMissionInitialTimeManually)}}
+                                            <input type="text" id="{{ formMissionInitialTimeManually.vars.id }}-{{ income.id }}" name="{{ formMissionInitialTimeManually.vars.full_name }}" class="form-control w-80 income" value="{{ income.initialTime }}" data-url="{{ path('mission_change_manually_time', {'id':income.id})}}" style="margin-left: 10px;">
+                                            {% do formMissionInitialTimeManually.initialTime.setRendered() %}
+                                            {% set newDelais = income.initialTime %}
+                                        </div>
+                                        <div class="group-timer2">
+                                            <button data-url="{{ path('mission_change_manually_time', {'id':income.id})}}" data-action="click->order--index#changeDelais" type="submit" data-input-id="{{ formMissionInitialTimeManually.vars.id }}-{{ income.id }}" value="{{ newDelais }}" class="btn icon-statut"><i class="fas fa-check icon-statut"></i></button>
+                                        </div>
+                                        {{ form_end(formMissionInitialTimeManually)}}
+                                    </div>
+                                {% else %}
+                                    {% if income.initialTime is empty %}
+                                        <a class="cursor-pointer" {{ stimulus_action('order--index','addTime','click') }} data-url="{{ path('mission_change_initial_time', {'id':income.id}) }}" data-name="{{ mission.product.name }}" data-taux-horaire="{{ tauxHoraire }}"><span class="text-my-flow font-weight-bold">À définir</span></a>
+                                    {% else %}
+                                            <div class="{% if not is_granted('ROLE_ADMIN') %}d-flex{% endif %}">
+                                                <div class="group-timer">
+                                                    {{ form_start(formMissionInitialTimeManually)}}
+                                                    <input type="text" id="{{ formMissionInitialTimeManually.vars.id }}-{{ income.id }}" name="{{ formMissionInitialTimeManually.vars.full_name }}" class="form-control w-80 income" value="{{ income.initialTime }}" data-url="{{ path('mission_change_manually_time', {'id':income.id})}}" style="margin-left: 10px;">
+                                                    {% do formMissionInitialTimeManually.initialTime.setRendered() %}
+                                                    {% set newDelais = income.initialTime %}
+                                                </div>
+                                                <div class="group-timer2">
+                                                    <button data-url="{{ path('mission_change_manually_time', {'id':income.id})}}" data-action="click->order--index#changeDelais" type="submit" data-input-id="{{ formMissionInitialTimeManually.vars.id }}-{{ income.id }}" value="{{ newDelais }}" class="btn icon-statut"><i class="fas fa-check icon-statut"></i></button>
+                                                </div>
+                                        {{ form_end(formMissionInitialTimeManually)}}
+                                            </div>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </td>
+                <td class="text-center padding-custom-quantity">
+                    {% if mission.stateClient is not empty %}
+                        <span class="badge bg-info-custom text-white text-badge position-relative me-5">
+                            <img src="{{ asset('build/media/mission/icon-finger.png') }}" class="icon-finger"/>
+                                Déclenchement en attente
+                            <span class="position-absolute top-0 start-100 translate-middle  badge badge-circle badge-primary-myflow">1</span>
+                        </span>
+                    {% endif %}
+                </td>
+                <td class="text-center state-provider">
+                    {% if mission.stateProvider is not empty %}
+                        <span class="badge bg-state-provider text-custom-blue text-badge">
+                            <img src="{{ asset('build/media/mission/icon-sablier.png') }}" class="icon-finger"/>
+                            {{ mission.stateProvider }}
+                        </span>
+                    {% endif %}
+                </td>
+                <td class="text-center">
+                    <a href="{{ path('mission_edit', {'id':mission.id}) }}"><img src="{{ asset('build/media/mission/icone-planning.png') }}"/></a>
+                </td>
+                <td class="text-center">
+                    {% set allParticipantsId = '' %}
+                    {% for participant in mission.participants|filter(p => p.role == constant('\\App\\Enum\\Role::ROLE_SUBCONTRACTOR')) %}
+                        {% if participant.user.id not in allParticipantsId %}
+                            {% if participant.user and participant.user.pictureName is not empty %}
+                                <img src="{{ vich_uploader_asset(participant.user, 'picture') }}" style="width: 35px; height:35px; border-radius: 5px; margin-right: 5px;">
+                            {% elseif participant.user %}
+                                <div class="symbol symbol-35px">
+                                    <div class="symbol-label fs-2 fw-bold text-primary">
+                                        {{ participant.user.firstname|slice(0,1)|upper }}{{ participant.user.lastname|slice(0,1)|upper }}
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% set allParticipantsId = allParticipantsId ~ participant.user.id %}
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td class="text-center">
+                    {% if mission.desiredDelivery|date('Ymd') < 'now'|date('Ymd') %}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill text-custom-pink align-top" viewBox="0 0 16 16">
+                            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                        </svg>
+                        <span class="font-weight-bold">{{ mission.desiredDelivery ? mission.desiredDelivery|date('d.m.Y') }}</span>
+
+                    {% else %}
+                        <i class="far fa-clock"></i>
+                        {{ mission.desiredDelivery ? mission.desiredDelivery|date('d.m.Y') }}
+                    {% endif %}
+                </td>
+                <td class="text-end">
+                    <div class="dropdown">
+                        <button class="btn btn-transparant" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" data-kt-menu-trigger="click"
+                                data-kt-menu-placement="bottom-start">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                            </svg>
+                        </button>
+                        <ul class="dropdown-menu menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-200px py-4" data-kt-menu="true" aria-labelledby="dropdownMenuButton1">
+                            {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SUBCONTRACTOR') %}
+                                {% if is_granted('ROLE_ADMIN') and mission.state in ['provisional', 'waiting', 'in_progress'] and mission.workflow is not null and not mission.workflow.activeStep %}
+                                    <div class="menu-item px-3">
+                                        <a {% if mission.canActivate %}
+                                            href="{{ path('mission_activate', {'id':mission.id}) }}"
+                                        {% else %}
+                                            data-bs-toggle="modal" data-bs-target="#kt_modal_activate"
+                                            {{ stimulus_action('order--index','activatedModal','click') }}
+                                            data-name="{{ mission.product.name }}"
+                                        {% endif %}
+                                            class="menu-link px-3 font-weight-bold">
+                                            Activation
+                                        </a>
+                                    </div>
+                                {% elseif is_granted('ROLE_SUBCONTRACTOR') and mission.state in ['provisional', 'waiting', 'in_progress'] and mission.workflow is not null and not mission.workflow.activeStep %}
+                                     {% for participant in mission.participants|filter(p => p.role == constant('\\App\\Enum\\Role::ROLE_SUBCONTRACTOR')) %}
+                                         {% if participant.user == app.user and mission.state in ['provisional', 'waiting', 'in_progress'] and not participant.activated %}
+                                             <div class="menu-item px-3 font-weight-bold">
+                                                 <a {% if mission.canActivate %}
+                                                     href="{{ path('mission_activate', {'id':mission.id}) }}"
+                                                 {% else %}
+                                                     data-bs-toggle="modal" data-bs-target="#kt_modal_activate"
+                                                     {{ stimulus_action('order--index','activatedModal','click') }}
+                                                     data-name="{{ mission.product.name }}"
+                                                 {% endif %}
+                                                     class="menu-link px-3">
+                                                     Activation
+                                                 </a>
+                                             </div>
+                                         {% endif %}
+                                     {% endfor %}
+                                {% endif %}
+                            {% endif %}
+                            <div class="menu-item px-3">
+                                <a href="{{ path('mission_edit', {'id':mission.id}) }}" class="menu-link px-3 font-weight-bold">
+                                    Accéder
+                                </a>
+                            </div>
+                            <div class="menu-item px-3">
+                                <a href="#" data-url2="{{ path('mission_transition', {'id':mission.id, 'transition':'cancel'}) }}" {{ stimulus_action('order--index','openCancelMissionModal')}} class="menu-link px-3 font-weight-bold">
+                                    Annuler
+                                </a>
+                            </div>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+    </tbody>
+</table>

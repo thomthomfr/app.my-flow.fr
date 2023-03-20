@@ -1,0 +1,28 @@
+{{ form_start(formChangeDateDelivery) }}
+<div class="modal fade" tabindex="-1" id="modal_date_livraison">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header custom-header">
+                <h5 class=" text-center">CHANGER DATE DE LIVRAISON</h5>
+                <button class="btn btn-sm btn-light custom-mr btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body text-center">
+                {{ form_label(formChangeDateDelivery.desiredDelivery, null, {'label_attr': {'class':'form-label'}}) }}
+                {{ form_widget(formChangeDateDelivery.desiredDelivery, {'attr': {'class':'form-control form-control-solid', 'min': "now"|date("Y-m-d")}}) }}
+                {{ form_errors(formChangeDateDelivery.desiredDelivery) }}
+                <div class="bouton-validate">
+                    <button
+                        type="submit"
+                        class="btn btn-green-mission mt-5"
+                    >
+                         <span class="indicator-label">
+                              Je valide
+                         </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ form_end(formChangeDateDelivery) }}

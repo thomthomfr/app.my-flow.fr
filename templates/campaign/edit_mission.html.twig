@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Modification campagne
+{% endblock %}
+
+{% block body %}
+    <div id="kt_content_container" class="container-fluid">
+        <div class="titre-header">
+            <h1>Modification {{ campaign.name|raw }}</h1>
+            <a href="{{ path('mission_index') }}" class="btn btn-secondary">Retour</a>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card pt-4 mb-6 mb-xl-9">
+                    <div class="card-body pt-0 pb-5">
+                        <span class="font-weight-bold">1. Informations client</span>
+                        <div class="form-group row mb-8 mt-5">
+                            <div class="col-lg-3 col-xl-3">
+                                <span class="font-weight-bold">Nom</span> : {{ campaign.orderedBy.lastname }}
+                            </div>
+                            <div class="col-lg-3 col-xl-3">
+                                <span class="font-weight-bold">Prénom</span> : {{ campaign.orderedBy.firstname }}
+                            </div>
+                        </div>
+                        <div class="form-group row mb-8 mt-5">
+                            <div class="col-lg-3 col-xl-3">
+                                <span class="font-weight-bold">Email</span> : {{ campaign.orderedBy.email }}
+                            </div>
+                            <div class="col-lg-3 col-xl-3">
+                                <span class="font-weight-bold">Téléphone</span> : {{ campaign.orderedBy.cellphone }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <span class="font-weight-bold">2. Liste des clients</span>
+                            <div class="table-responsive">
+                                <table class="table table-rounded table-striped border gy-7 gs-7">
+                                    <thead>
+                                    <tr class="fw-bold fs-6 text-gray-800">
+                                        <th>Nom</th>
+                                        <th>Prénom</th>
+                                        <th>Email</th>
+                                        <th>Téléphone</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for client in clients %}
+                                        {% if client.email != campaign.orderedBy.email %}
+                                            <tr>
+                                                <td>{{ client.firstname }}</td>
+                                                <td>{{ client.lastname }}</td>
+                                                <td>{{ client.email }}</td>
+                                                <td>{{ client.cellphone }}</td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-5">
+            {{ component('mission_prototype', {
+                campaign: campaign.id ? campaign : null,
+            }) }}
+        </div>
+    </div>
+{% endblock %}

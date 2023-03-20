@@ -1,0 +1,77 @@
+<div class="modal fade" tabindex="-1" id="modal_validate_step_{{mission.id}}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header custom-header">
+                <h5 class=" text-center">VALIDATION DE L'ETAPE</h5>
+                <button class="btn btn-sm btn-light custom-mr btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body text-center">
+                <p class="text-accept1 text-black">Etes-vous sur de vouloir passer</p>
+                <p class="text-accept1 text-black">à l'étape suivante ?</p>
+                <div class="bouton-validate">
+                    <a
+                        class="btn btn-primary-custom mt-5 w-25 font-weight-bold"
+                        href="{{ path('workflow_validate_step', {'step': step.id, 'workflow': step.workflow.id}) }}"
+                    >
+                         <span class="indicator-label">
+                              Je valide
+                         </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" id="modal_refuse_step_{{mission.id}}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header custom-header">
+                <h5 class=" text-center">DEMANDE DE MODIFICATION</h5>
+                <button class="btn btn-sm btn-light custom-mr btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body text-center">
+                <p class="text-refus1 text-black">Etes-vous sur de vouloir demander des modifications ?</p>
+                <div class="bouton-validate">
+                    <a
+                        class="btn btn-red-custom mt-5"
+                        href="{{ path('workflow_refuse_step', {'step': step.id, 'workflow': step.workflow.id}) }}"
+                    >
+                         <span class="indicator-label">
+                              Oui, je demande des modifications
+                         </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" id="modal_relaunching_customer_{{mission.id}}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header custom-header">
+                <h5 class=" text-center">RELANCER LE CLIENT</h5>
+                <button class="btn btn-sm btn-light custom-mr btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body text-center">
+                <p class="text-refus1 text-black">Etes-vous sur de vouloir relancer le client ?</p>
+                <div class="bouton-validate">
+                    <a
+                        class="btn btn-red-custom-warning mt-5"
+                        href="{{ path('workflow_relaunch_step', {'step': step.id, 'workflow': step.workflow.id}) }}"
+                    >
+                         <span class="indicator-label">
+                              Je relance le client
+                         </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

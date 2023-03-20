@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {% if app.request.get('_route') == 'email_new' %}
+        Ajouter un nouveau template
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+<div id="kt_content_container" class="container-fluid" {{ stimulus_controller('emailTemplate--handle') }}>
+    {{ form_start(form, {'attr':{'id':'emailTemplate_form','novalidate':'novalidate','data-emailTemplate--handle-target':'form'}}) }}
+    <div class="tab-content mt-5" id="myTabContent">
+        <div class="card pt-4 mb-6 mb-xl-9">
+            <div class="card-body pt-0 pb-5">
+                <span class="font-weight-bold">1. Identification</span>
+                <div class="form-group row mb-8 mt-5">
+                    {{ form_label(form.title, null, {'label_attr':{'class':'col-xl-2 col-lg-2 col-form-label'}}) }}
+                    <div class="col-lg-3 col-xl-3">
+                        {{ form_widget(form.title, {'attr':{'class':form.title.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                        {{ form_errors(form.title) }}
+                    </div>
+                </div>
+                <div class="form-group row mb-8">
+                    {{ form_label(form.senderName, null, {'label_attr':{'class':'col-xl-2 col-lg-2 col-form-label'}}) }}
+                    <div class="col-lg-3 col-xl-3">
+                        {{ form_widget(form.senderName, {'attr':{'class':form.senderName.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                        {{ form_errors(form.senderName) }}
+                    </div>
+                </div>
+                <div class="form-group row mb-8">
+                    {{ form_label(form.subject, null, {'label_attr':{'class':'col-xl-2 col-lg-2 col-form-label'}}) }}
+                    <div class="col-lg-3 col-xl-3">
+                        {{ form_widget(form.subject, {'attr':{'class':form.subject.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                        {{ form_errors(form.subject) }}
+                    </div>
+                </div>
+                <div class="form-group row mb-8">
+                    {{ form_label(form.content, null, {'label_attr':{'class':'col-xl-2 col-lg-2 col-form-label'}}) }}
+                    <div class="col-lg-5 col-xl-5">
+                        {{ form_widget(form.content, {'attr':{'class':form.content.vars.errors|length ? 'form-control is-invalid':'form-control','data-emailTemplate--handle-target' : 'tinyMCE'}}) }}
+                        {{ form_errors(form.content) }}
+                    </div>
+                    {{ include('email_template/_shortcodes.html.twig') }}
+                </div>
+                <div class="form-group row mb-8">
+                    {{ form_label(form.pushContent, null, {'label_attr':{'class':'col-xl-2 col-lg-2 col-form-label'}}) }}
+                    <div class="col-lg-5 col-xl-5">
+                        {{ form_widget(form.pushContent, {'attr':{'class':form.pushContent.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                        {{ form_errors(form.pushContent) }}
+                    </div>
+                </div>
+                <span class="font-weight-bold">2. Etat</span>
+                <div class="form-group row mb-8">
+                    {{ form_label(form.active, null, {'label_attr':{'class':'col-xl-2 col-lg-2 col-form-label checkbox-custom-label'}}) }}
+                    <div class="col-lg-3 col-xl-3">
+                        {{ form_widget(form.active, {'attr':{'class':form.active.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                        {{ form_errors(form.active) }}
+                    </div>
+                </div>
+                <button
+                    type="button"
+                    class="btn btn-primary-custom"
+                    data-kt-stepper-action="submit"
+                    {{ stimulus_action('emailTemplate--handle', 'submitForm') }}
+                >
+                                <span class="indicator-label">
+                                    Enregistrer
+                                </span>
+                    <span class="indicator-progress">
+                                    Enregistrement en cours... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                </span>
+                </button>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+</div>
+
+{% endblock %}

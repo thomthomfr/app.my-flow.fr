@@ -1,0 +1,40 @@
+framework:
+    workflows:
+        classic:
+            type: 'state_machine'
+            supports:
+                - App\Entity\Campaign
+                - App\Entity\Mission
+            marking_store:
+                type: 'method'
+                property: 'state'
+            places:
+                - provisional
+                - waiting
+                - waiting_activated
+                - in_progress
+                - paused
+                - cancelled
+                - archived
+            transitions:
+                validate:
+                    from: provisional
+                    to: waiting
+                activated:
+                    from: [in_progress, waiting, waiting_activated]
+                    to: in_progress
+                cancel:
+                    from: [provisional, waiting, in_progress, paused, waiting_activated]
+                    to: cancelled
+                pause:
+                    from: [in_progress]
+                    to: paused
+                unpause:
+                    from: paused
+                    to: in_progress
+                archive:
+                    from: [in_progress]
+                    to: archived
+                waitActivate:
+                    from: waiting
+                    to: waiting_activated

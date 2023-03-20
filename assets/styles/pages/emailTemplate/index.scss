@@ -1,0 +1,28 @@
+.toast-shortcode{
+    padding: 0!important;
+    width: 100% !important;
+    opacity: 1!important;
+    border: 1px solid rgba(0, 0, 0, 0.05)!important;
+    box-shadow: none!important;
+}
+.shortcode-dispo{
+    font-weight: 600!important;
+}
+    .header-brand{
+        img{
+            display: none;
+        }
+    }
+@media screen and (max-device-width: 995px) {
+    .titre-header{
+        display: block;
+    }
+}
+@media screen and (max-width: 768px) {
+    .btn-add-template{
+        width: 100% !important;
+    }
+    .input-search{
+        width: 100%!important;
+    }
+}

@@ -1,0 +1,7 @@
+{% block form_errors %}
+    <div class="invalid-feedback">
+        {% for error in errors %}
+            {% if not loop.first %}, {% endif %}{{ error.message }}
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {% if app.request.get('_route') == 'campaign_new' %}
+        Ajouter une nouvelle commande
+    {% else %}
+        {{ campaign.name }}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div id="kt_content_container" class="container-fluid" {{ stimulus_controller('order--order-handle') }}>
+        {{ form_start(form, {'attr':{'id':'user_form','novalidate':'novalidate','data-order--order-handle-target':'form'}}) }}
+        <div class="titre-header">
+            <h1>CREATION CAMPAGNE</h1>
+            <a href="{{ path('mission_index') }}" class="btn btn-custom-retour">Retour</a>
+        </div>
+        <div class="tab-content mt-5" id="myTabContent">
+            <div class="card pt-4 mb-6 mb-xl-9">
+                <div class="card-body pt-0 pb-5">
+                    <span class="font-weight-bold">1. Identification</span>
+                    <div class="form-group row mb-8 mt-5">
+                        {{ form_label(form.name, null, {'label_attr':{'class':'col-xl-2 col-lg-2 col-form-label'}}) }}
+                        <div class="col-lg-3 col-xl-3">
+                            {{ form_widget(form.name, {'attr':{'class':form.name.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                            {{ form_errors(form.name) }}
+                        </div>
+                    </div>
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        data-kt-stepper-action="submit"
+                        {{ stimulus_action('order--order-handle', 'submitForm') }}
+                    >
+                                <span class="indicator-label">
+                                    Enregistrer
+                                </span>
+                        <span class="indicator-progress">
+                                    Enregistrement en cours... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

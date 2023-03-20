@@ -1,0 +1,18 @@
+vich_uploader:
+    db_driver: orm
+
+    mappings:
+        sub_contractor_image:
+            uri_prefix: /uploads/profiles
+            upload_destination: '%kernel.project_dir%/public/uploads/profiles'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+
+        company_image:
+            uri_prefix: /uploads/images/company
+            upload_destination: '%kernel.project_dir%/public/uploads/images/company'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+            
+        invoice_campaign:
+            uri_prefix: /uploads/invoices
+            upload_destination: '%kernel.project_dir%/public/uploads/invoices'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer

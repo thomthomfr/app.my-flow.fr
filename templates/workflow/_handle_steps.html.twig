@@ -1,0 +1,20 @@
+{% for step in workflow.steps %}
+    <div class="row mt-5 tab-content">
+        <div class="col-3 pe-0">
+            <div class="card shadow cursor-pointer" data-top="-{{ (workflow.steps|length - loop.index0) * 200 }}px" data-step-id="{{ step.id }}" {{ stimulus_action('workflow--handle', 'editStep', 'click') }}>
+                <div class="card-body py-3 px-7">
+                    <span class="fs-2 fw-bolder">{{ step.name }}</span><br>
+                    <span class="text-muted fs-4">Délais : {{ step.completionTime }} jour(s)</span>
+                </div>
+            </div>
+        </div>
+        {{ include('workflow/_handle_actions.html.twig') }}
+    </div>
+    {% if not loop.last %}
+        <div class="row mt-4 text-center">
+            <div class="col-3 pe-0">
+                <img src="{{ asset('build/media/arrowdown.png') }}" height="100">
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}

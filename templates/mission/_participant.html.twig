@@ -1,0 +1,216 @@
+<div class="card" {{ stimulus_controller('mission--participant', {
+    fetchClientsUrl: path('api_clients_search'),
+}) }}>
+    <div class="card-body">
+        <h3 class="text-center title-participant">PARTICIPANTS</h3>
+        <p class="card-text text-box-mission mt-9">
+            Contact(s) projet
+        </p>
+        <div class="table-responsive">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td class="custom-table">
+                            <div class="symbol symbol-35px">
+                                <div class="symbol-label fs-2 fw-bold text-primary">
+                                    ML
+                                </div>
+                            </div>
+                            Michael Le Hoang
+                        </td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-light" href="mailto:michael.lh@my-flow.fr" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" title="michael.lh@my-flow.fr"><i class="fas fa-envelope"></i></a>
+                            <a class="btn btn-sm btn-light" href="tel:+33643714890" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" title="+33643714890"><i class="fas fa-mobile-alt"></i></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="custom-table">
+                            <div class="symbol symbol-35px">
+                                <div class="symbol-label fs-2 fw-bold text-primary">
+                                    TS
+                                </div>
+                            </div>
+                            Thomas Stein
+                        </td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-light" href="mailto:thomas.s@my-flow.fr" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" title="thomas.s@my-flow.fr"><i class="fas fa-envelope"></i></a>
+                            <a class="btn btn-sm btn-light" href="tel:+33671352332 " data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" title="+33671352332"><i class="fas fa-mobile-alt"></i></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="card-text text-box-mission mt-9">
+            Contact(s) client
+            {% if is_granted('ROLE_ADMIN') %}
+                <button type="button" class="btn btn-transparant p-2 pt-1 text-gray-400" {{ stimulus_action('mission--participant','openModal') }}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                    </svg>
+                </button>
+            {% endif %}
+        </p>
+        <div class="table-responsive">
+            <table class="table">
+                <tbody>
+                {% for participant in mission.participants|filter(p => p.role.value != 'ROLE_SUBCONTRACTOR') %}
+                    <tr>
+                        <td class="custom-table">
+                            {% if participant.user.pictureName is not empty %}
+                                <img src="{{ vich_uploader_asset(participant.user, 'picture') }}" style="width: 35px; height:35px; border-radius: 5px;">
+                            {% else %}
+                                <div class="symbol symbol-35px">
+                                    <div class="symbol-label fs-2 fw-bold text-primary">
+                                        {{ participant.user.firstname|slice(0,1) }}{{ participant.user.lastname|slice(0,1) }}
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {{ participant.user.firstname }} {{ participant.user.lastname|slice(0,1) }}. <span>({{ participant.role.label }})</span></td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-light" href="mailto:{{ participant.user.email }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" title="{{ participant.user.email }}"><i class="fas fa-envelope"></i></a>
+                            <a class="btn btn-sm btn-light" href="tel:{{ participant.user.cellPhone }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" title="{{ participant.user.cellPhone }}"><i class="fas fa-mobile-alt"></i></a>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a class="btn btn-sm btn-light" href="{{ path('mission_participant_delete', {'mission': mission.id, 'missionParticipant': participant.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir enlever ce participant de la mission ?');"><i class="fas fa-trash"></i></a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <p class="text-box-mission mt-9">
+            Contact(s) opérationnel(s)
+            {% if is_granted('ROLE_ADMIN') %}
+                <button type="button" class="btn btn-transparant p-2 pt-1 text-gray-400" {{ stimulus_action('mission--participant','openModalSubContractor') }}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                    </svg>
+                </button>
+            {% endif %}
+        </p>
+        <div class="table-responsive">
+            <table class="table">
+                <tbody>
+                {% set allParticipantsId = '' %}
+                {% for participant in mission.participants|filter(p => p.role.value == 'ROLE_SUBCONTRACTOR') %}
+                    {% if participant.user.id not in allParticipantsId %}
+                        <tr>
+                            <td class="custom-table">
+                                {% if participant.user.pictureName is not empty %}
+                                    <img src="{{ vich_uploader_asset(participant.user, 'picture') }}" style="width: 35px; height:35px; border-radius: 5px;">
+                                {% else %}
+                                    <div class="symbol symbol-35px">
+                                        <div class="symbol-label fs-2 fw-bold text-primary">
+                                            {{ participant.user.firstname|slice(0,1) }}{{ participant.user.lastname|slice(0,1) }}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                {{ participant.user.firstname }} {{ participant.user.lastname|slice(0,1) }}. <span>({{ participant.job.name }}) </span> {% if is_granted('ROLE_ADMIN') %}<span> {% if participant.estimatedIncome is not empty or participant.initialTime is not empty %} - ({{ participant.estimatedIncome }}€ / {{ participant.initialTime }} minute(s)){% endif %}</span>{% endif %}</td>
+                            <td class="text-end">
+                                <a class="btn btn-sm btn-light" href="mailto:{{ participant.user.email }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" title="{{ participant.user.email }}"><i class="fas fa-envelope"></i></a>
+                                <a class="btn btn-sm btn-light" href="tel:{{ participant.user.cellPhone }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-dark" title="{{ participant.user.cellPhone }}"><i class="fas fa-mobile-alt"></i></a>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <button class="btn btn-sm btn-light" data-url="{{ path('mission_participant_edit', {'mission': mission.id, 'missionParticipant': participant.id}) }}" {{ stimulus_action('mission--participant', 'openEditSubcontractorModal') }}><i class="fas fa-edit"></i></button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endif %}
+                    {% set allParticipantsId = allParticipantsId ~ participant.user.id %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <div class="modal fade" tabindex="-1" {{ stimulus_target('mission--participant','modal') }}>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header custom-header">
+                        <h5 class=" text-center">AJOUTER UN CONTACT CLIENT</h5>
+                        <button class="btn btn-sm btn-light custom-mr btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    {{ form_start(formAddMissionContact) }}
+                    <div class="modal-body text-center">
+                        <div class="form-group row mb-8">
+                            {{ form_label(formAddMissionContact.user, null, {'label_attr':{'class':'col-lg-4 col-form-label'}}) }}
+                            <div class="col-lg-8">
+                                {{ form_widget(formAddMissionContact.user, {'attr':{'class':formAddMissionContact.user.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                                {{ form_errors(formAddMissionContact.user) }}
+                            </div>
+                        </div>
+                        <div class="form-group row mb-8">
+                            {{ form_label(formAddMissionContact.role, null, {'label_attr':{'class':'col-lg-4 col-form-label'}}) }}
+                            <div class="col-lg-8">
+                                {{ form_widget(formAddMissionContact.role, {'attr':{'class':formAddMissionContact.role.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                                {{ form_errors(formAddMissionContact.role) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer text-center">
+                        <button type="submit" class="btn btn-green-mission">Ajouter</button>
+                    </div>
+                    {{ form_end(formAddMissionContact) }}
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" tabindex="-1" {{ stimulus_target('mission--participant','editSubcontractorModal') }}>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header custom-header">
+                        <h5 class=" text-center">MODIFIER UN PARTENAIRE</h5>
+                        <button class="btn btn-sm btn-light custom-mr btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    {{ form_start(formEditSubcontractor, {'attr':{'data-mission--participant-target':'editSubcontractorForm'}}) }}
+                    <div class="modal-body text-center">
+                        <div class="form-group row mb-8">
+                            {{ form_label(formEditSubcontractor.user, null, {'label_attr':{'class':'col-lg-4 col-form-label'}}) }}
+                            <div class="col-lg-8">
+                                {{ form_widget(formEditSubcontractor.user, {'attr':{'class':formEditSubcontractor.user.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                                {{ form_errors(formEditSubcontractor.user) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer text-center">
+                        <button type="submit" class="btn btn-green-mission">Modifier</button>
+                    </div>
+                    {{ form_end(formEditSubcontractor) }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <div class="modal fade" tabindex="-1" {{ stimulus_target('mission--participant','modalSubContractor') }}>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header custom-header">
+                        <h5 class=" text-center">AJOUTER UN CONTACT OPÉRATIONNEL</h5>
+                        <button class="btn btn-sm btn-light custom-mr btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    {{ form_start(formAddMissionSubContractor) }}
+                    <div class="modal-body text-center">
+                        <div class="form-group row mb-8">
+                            {{ form_label(formAddMissionSubContractor.user, null, {'label_attr':{'class':'col-lg-4 col-form-label'}}) }}
+                            <div class="col-lg-8">
+                                {{ form_widget(formAddMissionSubContractor.user, {'attr':{'class':formAddMissionSubContractor.user.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                                {{ form_errors(formAddMissionSubContractor.user) }}
+                            </div>
+                        </div>
+                        <div class="form-group row mb-8">
+                            {{ form_label(formAddMissionSubContractor.job, null, {'label_attr':{'class':'col-lg-4 col-form-label'}}) }}
+                            <div class="col-lg-8">
+                                {{ form_widget(formAddMissionSubContractor.job, {'attr':{'class':formAddMissionSubContractor.job.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                                {{ form_errors(formAddMissionSubContractor.job) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer text-center">
+                        <button type="submit" class="btn btn-green-mission">Ajouter</button>
+                    </div>
+                    {{ form_end(formAddMissionSubContractor) }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>

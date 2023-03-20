@@ -1,0 +1,18 @@
+<table>
+    <tbody class="color-content">
+    {% for campaign in campaigns %}
+        {% for mission in campaign.missions %}
+            {% if mission.createdAt|date('m.Y') == month|date('m.Y') %}
+                <tr class="w-100">
+                    <td class="font-italic" style="width: 250px;"></td>
+                    <td class="font-italic" style="width: 320px;">{{ mission.type }}</td>
+                    <td class="font-italic" style="width: 250px;">8000,00€</td>
+                    <td class="font-italic" style="width: 250px;">38</td>
+                    <td class="font-italic" style="width: 200px;"></td>
+                    <td class="font-italic" style="width: 200px;"></td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+    </tbody>
+</table>

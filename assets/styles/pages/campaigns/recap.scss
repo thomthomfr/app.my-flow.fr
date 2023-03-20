@@ -1,0 +1,161 @@
+.titre-recap{
+    text-decoration: underline;
+    font-size: 3em;
+}
+.name-projet{
+    font-size: 1.5em;
+    font-weight: 500;
+}
+.top-recap{
+    justify-content: space-between;
+}
+.btn-top{
+    margin-top: 15px!important;
+    a{
+        margin-left: 10px;
+    }
+}
+.card-brief-top{
+    background-color: #9094C1!important;
+    align-items: center!important;
+    h3{
+        font-weight: bold!important;
+        font-size: 1.5em!important;
+        color: white!important;
+    }
+}
+.card-brief-corp{
+    background-color: #F4F8FB;
+}
+.piece-jointe{
+    justify-content: space-between;
+}
+.table-name th{
+    font-size: 1.5em!important;
+}
+.table-name{
+    text-align: center;
+}
+.table-content{
+    text-align: center;
+}
+.card-solde{
+    background-color: #0B065B;
+    border-radius: 10px 10px 0px 0px;
+    color: white;
+    width: 40%;
+    height: 50px;
+    .solde{
+        justify-content: space-between;
+        p{
+            font-size: 1.3em;
+        }
+        .ml-custom{
+            margin-left: 15px;
+        }
+        .mr-custom{
+            margin-right: 15px;
+        }
+    }
+}
+.card-info-solde{
+    background-color: #0B065B;
+    border-radius: 0px 5px 0px 0px;
+    color: white;
+    height: 85px;
+    .info-solde-content{
+        p{
+            font-size: 1.3em;
+            margin-left: 15px;
+            span{
+                color: $color-pink-custom;
+                font-weight: bold;
+            }
+        }
+    }
+}
+.participants{
+    margin-top: 50px!important;
+    width: 50%;
+    .card-observateur-validateur-top{
+        background-color: #9094C1!important;
+        align-items: center!important;
+        h3{
+            font-weight: bold!important;
+            font-size: 1.5em!important;
+            color: white!important;
+        }
+    }
+    .card-observateur-validateur-corp{
+        background-color: #F4F8FB;
+    }
+}
+.product-name{
+    font-size: 1.2em!important;
+    color: #292B2F;
+}
+.mission-quantity{
+    color: #292B2F!important;
+    font-size: 1.2em!important;
+}
+.mission-price{
+    color: #292B2F!important;
+    font-size: 1.2em!important;
+}
+.mission-delivery{
+    span {
+        color: #8C8AAE!important;
+    }
+    font-size: 1.2em!important;
+}
+.small-date{
+    color: #8C8AAE!important;
+    position: relative;
+}
+.card-global-recap{
+    margin-bottom: 100px!important;
+}
+.role-participants{
+    color: #48474C!important;
+    font-size: 1.2em;
+    vertical-align: bottom;
+}
+.detail-pj{
+    font-size: 1.2em;
+}
+.badge-text{
+    white-space: normal!important;
+}
+@media screen and (max-width: 600px) {
+    .participants{
+        width: 100%!important;
+    }
+}
+@media screen and (max-width: 669px) {
+    .card-solde{
+        width: 100%!important;
+    }
+}
+@media screen and (max-width: 337px) {
+    .solde{
+        margin-top: 0px!important;
+    }
+}
+@media screen and (max-width: 699px) {
+    .card-brief-pj{
+        display: block;
+    }
+    .card-brief{
+        margin-top: 20px!important;
+    }
+    .top-recap{
+        display: block!important;
+    }
+}
+@media screen and (max-width: 392px) {
+    .btn-top a {
+        margin-left: 0!important;
+        width: 100% !important;
+        margin-top: 10px!important;
+    }
+}

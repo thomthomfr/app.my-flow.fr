@@ -1,0 +1,37 @@
+@import "../../../theme/src/sass/components/variables.custom";
+
+.add-step-card {
+    position: relative;
+    top: -10rem;
+}
+
+.action-infos {
+    top:70px;
+    left:-100px;
+}
+
+.shadow-lg-primary {
+    box-shadow: 0 1rem 2rem 1rem rgba($primary, 0.3) !important;
+}
+
+.shadow-lg-info {
+    box-shadow: 0 1rem 2rem 1rem rgba($info, 0.25) !important;
+}
+
+.shadow-lg-danger {
+    box-shadow: 0 1rem 2rem 1rem rgba($danger, 0.2) !important;
+}
+@media screen and (max-width: 425px) {
+   .table-responsive{
+       .tab-content{
+           width: max-content!important;
+       }
+   }
+    .card-add-step{
+        width: fit-content!important;
+    }
+    .col-add-step{
+        width: 100% !important;
+    }
+}
+

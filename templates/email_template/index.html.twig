@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des templates{% endblock %}
+
+{% block styles %}
+    {{ encore_entry_link_tags('plugins/custom/datatables/datatables.bundle') }}
+{% endblock %}
+
+{% block body %}
+    <div id="kt_content_container" class="container-fluid" {{ stimulus_controller('emailTemplate--index') }}>
+        <div class="titre-header">
+            {% if app.request.get('_route') == 'email_template_index' %}
+                <h1>MES TEMPLATES</h1>
+                <div class="d-flex align-items-center position-relative my-1">
+            <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <rect x="0" y="0" width="24" height="24" />
+                        <path d="M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                        <path d="M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z" fill="#000000" fill-rule="nonzero" />
+                    </g>
+                </svg>
+            </span>
+                    <input type="text"
+                           class="form-control form-control w-600px ps-15 input-search"
+                           placeholder="Rechercher ..."
+                        {{ stimulus_action('emailTemplate--index', 'searchTable', 'keyup') }}
+                    />
+                </div>
+                <a href="{{ path('email_new') }}" class="btn btn-primary-custom font-weight-bold btn-add-template"><i class="fas fa-plus-circle text-white"></i>Ajouter un template</a>
+            {% endif %}
+        </div>
+        <div class="card shadow-sm mt-5">
+            <div class="card-body">
+                <table id="kt_datatable_example_1" class="table table-row-bordered gy-5" {{ stimulus_target('emailTemplate--index','datatable') }}>
+                    <thead>
+                    <tr class="fw-bold fs-6 text-muted">
+                        <th class="align-top" style="width: 220px;">Titre</th>
+                        <th class="align-top" style="width: 220px;">Expéditeur</th>
+                        <th class="align-top" style="width: 600px;">Contenu</th>
+                        <th class="align-top"></th>
+                        <th class="align-top"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for emailTemplate in emailTemplates %}
+                        <tr>
+                            <td>{{ emailTemplate.title }}</td>
+                            <td>{{ emailTemplate.senderName }}</td>
+                            <td>{{ emailTemplate.content|raw }}</td>
+                            <td class="text-center">
+                                {% if emailTemplate.active == true %}
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
+                                        <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                                    </svg>
+                                {% else %}
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                    </svg>
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-transparant"
+                                        data-kt-menu-trigger="click"
+                                        data-kt-menu-placement="bottom-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                                        <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                                    </svg>
+                                </button>
+                                <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 fw-bold fs-7 w-200px py-4"
+                                     data-kt-menu="true">
+                                    <div class="menu-item px-3">
+                                        <a href="{{ path('email_edit', {'id':emailTemplate.id}) }}" class="menu-link px-3">
+                                            Modifier
+                                        </a>
+                                        <a href="{{ path('email_delete', {'id':emailTemplate.id}) }}" class="menu-link px-3">
+                                            Supprimer
+                                        </a>
+                                        {% if emailTemplate.active == 1 %}
+                                            <a href="{{ path('email_disabled', {'id':emailTemplate.id, 'active': emailTemplate.active ? 'desactiver' : 'activer'}) }}" class="menu-link px-3">
+                                                Désactiver
+                                            </a>
+                                        {% else %}
+                                            <a href="{{ path('email_disabled', {'id':emailTemplate.id, 'active': emailTemplate.active ? 'desactiver' : 'activer'}) }}" class="menu-link px-3">
+                                                Activer
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

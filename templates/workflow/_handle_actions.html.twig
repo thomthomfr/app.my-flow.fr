@@ -1,0 +1,18 @@
+<div class="col-9 ps-20 d-flex" style="background: url('{{ asset('build/media/line.png') }}') repeat-x center">
+    {% for action in step.actions %}
+        <div class="w-100px d-flex align-items-center justify-content-center">
+            <div class="symbol symbol-50px symbol-circle cursor-pointer shadow-lg-{{ action.recipient.background }}" data-step-id="{{ step.id }}" data-action-id="{{ action.id }}" {{ stimulus_action('workflow--handle','editAction','click') }}>
+                <div class="symbol-label bg-{{ action.recipient.background }} fs-2 fw-bold text-success"><i class="fs-2 fas fa-envelope text-inverse-{{ action.recipient.background }}"></i></div>
+            </div>
+        </div>
+        <div class="w-100px position-relative text-center action-infos">
+            <span class="fs-4 text-black-70 text-italic">@{{ action.recipient.label }}</span><br>
+            <span class="text-gray-600">{{ action.name }}</span>
+        </div>
+    {% endfor %}
+    <div class="w-100px d-flex align-items-center justify-content-center">
+        <div class="symbol symbol-50px symbol-circle cursor-pointer">
+            <div class="symbol-label bg-white fs-2 fw-bold text-success" data-step-id="{{ step.id }}" {{ stimulus_action('workflow--handle', 'addAction', 'click') }}><i class="fas fa-plus"></i></div>
+        </div>
+    </div>
+</div>

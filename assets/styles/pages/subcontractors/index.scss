@@ -1,0 +1,43 @@
+.select2-container--bootstrap5 .select2-selection--multiple:not(.form-select-sm):not(.form-select-lg) .select2-selection__choice {
+    background-color: $color-blue-custom;
+    color: white;
+}
+.select2-container--bootstrap5 .select2-selection--multiple:not(.form-select-sm):not(.form-select-lg) .select2-selection__choice .select2-selection__choice__display{
+    font-size: 1.2em;
+}
+.select2-container--bootstrap5 .select2-selection--multiple .select2-selection__rendered .select2-selection__choice .select2-selection__choice__remove{
+    //background-image: linear-gradient(rgba(255, 255, 255, 255), rgba(255, 255, 255, 255),
+    //url("../../media/examples/lizard.png");
+}
+@media screen and (max-width: 1570px) {
+    #tarif-max {
+        display: block;
+    }
+}
+@media screen and (max-width: 768px) {
+   .btn-add-presta{
+       width: 100%;
+       margin-top: 5px;
+   }
+}
+@media screen and (max-width: 1024px) {
+    .titre-header{
+       display: block!important;
+    }
+}
+@media screen and (max-width: 578px) {
+    #section-top-presta{
+        display: block!important;
+    }
+    .input-search{
+        width: 100% !important;
+        margin-bottom: 10px;
+    }
+    #tarif-max{
+        width: 100% !important;
+    }
+    #tarif-min{
+        width: 100% !important;
+    }
+}
+

@@ -1,0 +1,49 @@
+<div class="form-group row" {% if child is defined and child %}style="background: url({{ asset('build/media/tree.png') }}) top left 15px no-repeat;" {% endif %}>
+    <div class="col-2 {% if child is defined and child %}ps-10{% endif %}">
+        {{ form_widget(form.vars.prototype.children.triggerType, {'attr': {'class':'form-control'}}) }}
+        {% if child is defined and child %}
+            <script>
+                var options = document.getElementById('{{ form.vars.prototype.children.triggerType.vars.id }}').options;
+                for (let i = 0; i < options.length; i++) {
+                    if (options[i].value == 6 || options[i].value == 7) {
+                        options[i].classList.add('d-none');
+                    }
+                }
+            </script>
+        {% endif %}
+    </div>
+    <div class="col-2">
+        {{ form_widget(form.vars.prototype.children.operator, {'attr': {'class':'form-control'}}) }}
+    </div>
+    <div class="col-2">
+        {{ form_widget(form.vars.prototype.children.timePeriod, {'attr': {'class':'form-control'}}) }}
+    </div>
+    <div class="col-2">
+        {{ form_widget(form.vars.prototype.children.operation, {'attr': {'class':'form-control'}}) }}
+    </div>
+    <div class="col-3">
+        {{ form_widget(form.vars.prototype.children.emailTemplate, {'attr': {'class':'form-control'}}) }}
+    </div>
+    <div class="col-1">
+        <i class="fa fa-times text-my-flow bg-white p-2 cursor-pointer" onclick="$(this).parents().get(2).remove();"></i>
+    </div>
+</div>
+{% if form.vars.prototype.children.childs is defined %}
+    <div
+        id="trigger_child_container___name__"
+        class="form-group row"
+        data-prototype="{{ include('workflow/_trigger_prototype.html.twig', {'form': form.vars.prototype.children.childs, 'child':true})|e }}"
+        data-widget-tags="{{ '<div class="mt-1 py-3"></div>'|e }}"
+        {{ stimulus_target('workflow--handle', 'addChildTriggerContainer') }}
+    ></div>
+    <div class="row mt-4">
+        <div class="col-10 offset-1 d-grid gap-2">
+            <button
+                type="button"
+                class="btn btn-icon bg-secondary w-auto d-none"
+                {{ stimulus_action('workflow--handle', 'addTriggerWidget') }}
+                data-selector="#trigger_child_container___name__"
+            ><i class="fas fa-plus text-my-flow"></i></button>
+        </div>
+    </div>
+{% endif %}

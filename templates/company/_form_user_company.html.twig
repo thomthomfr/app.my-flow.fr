@@ -1,0 +1,24 @@
+<div class="form-group row mb-8 mt-8">
+    {{ form_label(form2.users, 'Prénom:', {'label_attr': {'class':'col-xl-1 col-lg-1 col-form-label'}}) }}
+    <div class="col-lg-2 col-xl-2">
+        {{ form_widget(form2.users.vars.prototype.children.firstname, {'attr': {'class':form2.users.vars.prototype.children.firstname.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+    </div>
+    {{ form_label(form2.users,'nom:', {'label_attr': {'class':'col-xl-1 col-lg-1 col-form-label'}}) }}
+    <div class="col-lg-2 col-xl-2">
+        {{ form_widget(form2.users.vars.prototype.children.lastname, {'attr': {'class':form2.users.vars.prototype.children.lastname.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+    </div>
+    {{ form_label(form2.users,'Adresse email:', {'label_attr': {'class':'col-xl-2 col-lg-2 col-form-label'}}) }}
+    <div class="col-lg-3 col-xl-3">
+        {{ form_widget(form2.users.vars.prototype.children.email, {'attr': {'class':form2.users.vars.prototype.children.email.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+    </div>
+</div>
+<div class="form-group row mb-8 mt-8">
+    {{ form_label(form2.users,'Téléphone:', {'label_attr': {'class':'col-xl-1 col-lg-1 col-form-label'}}) }}
+    <div class="col-lg-2 col-xl-2">
+        {{ form_widget(form2.users.vars.prototype.children.cellPhone, {'attr': {'class':form2.users.vars.prototype.children.cellPhone.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+    </div>
+    {{ form_label(form2.users,'Type:', {'label_attr': {'class':'col-xl-1 col-lg-1 col-form-label'}}) }}
+    <div class="col-lg-2 col-xl-2">
+        {{ form_widget(form2.users.vars.prototype.children.accountType, {'attr': {'class':form2.users.vars.prototype.children.accountType.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+    </div>
+</div>

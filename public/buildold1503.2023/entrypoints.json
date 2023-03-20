@@ -1,0 +1,49 @@
+{
+  "entrypoints": {
+    "plugins/global/plugins.bundle": {
+      "js": [
+        "/build/runtime.f3fb6d16.js",
+        "/build/plugins/global/plugins.bundle.8cc86bf3.js"
+      ],
+      "css": [
+        "/build/595.0fa71269.css",
+        "/build/plugins/global/plugins.bundle.31d6cfe0.css"
+      ]
+    },
+    "css/style.bundle": {
+      "js": [
+        "/build/runtime.f3fb6d16.js",
+        "/build/css/style.bundle.fb8906c1.js"
+      ],
+      "css": [
+        "/build/css/style.bundle.ea413972.css"
+      ]
+    },
+    "plugins/custom/datatables/datatables.bundle": {
+      "js": [
+        "/build/runtime.f3fb6d16.js",
+        "/build/124.528738e9.js",
+        "/build/plugins/custom/datatables/datatables.bundle.f146923f.js"
+      ]
+    },
+    "app": {
+      "js": [
+        "/build/runtime.f3fb6d16.js",
+        "/build/124.528738e9.js",
+        "/build/688.322111aa.js",
+        "/build/app.22eeecdf.js"
+      ],
+      "css": [
+        "/build/app.95360e51.css"
+      ]
+    },
+    "workflow_handle": {
+      "js": [
+        "/build/runtime.f3fb6d16.js"
+      ],
+      "css": [
+        "/build/workflow_handle.6750cc9e.css"
+      ]
+    }
+  }
+}

@@ -1,0 +1,21 @@
+<div class="modal fade" id="remove_subContractor_{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form method="post" action="{{path('sub_contractor_remove', {'id': user.id}) }}" class="d-inline" id="{{ user.id }}">
+            <div class="modal-content">
+                <div class="modal-header custom-header">
+                    <h5 class=" text-center">SUPPRIMER LE COMPTE</h5>
+                    <button class="btn btn-sm btn-light custom-mr btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-accept1">Etes-vous sûr de vouloir supprimer votre compte?</p>
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary-custom" name="deleteSubContractor_{{ user.id }}">Supprimer</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

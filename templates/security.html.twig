@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <title>My Flow - Connexion{% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" />
+    <link rel="shortcut icon" href="{{ asset('build/media/favicon.ico') }}" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700|Titillium+Web:300,400,500,600,700" />
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('plugins/global/plugins.bundle') }}
+        {{ encore_entry_link_tags('css/style.bundle') }}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+
+    {% block scripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+</head>
+<body id="kt_body" class="bg-body" data-turbo="false">
+<div class="d-flex flex-column flex-root">
+    <div class="d-flex flex-column flex-lg-row flex-column-fluid">
+        {{ include('_flashbag.html.twig') }}
+        <div class="d-flex flex-column flex-lg-row-fluid py-10 right-login">
+            <div class="d-flex flex-center flex-column flex-column-fluid">
+                <div class="mb-5">
+                    <a href="{{ path('app_login') }}"><img src="{{ asset('build/media/logo-myflow.png') }}" alt="my flow logo"></a>
+                </div>
+                <div class="custom-card-body bg-body rounded p-10 p-lg-15 mx-auto">
+                    {% block content %}{% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

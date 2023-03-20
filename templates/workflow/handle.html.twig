@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block metas %}
+    {{ parent() }}
+    <meta name="turbo-cache-control" content="no-preview">
+{% endblock %}
+
+{% block title %}Gestion des process{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('workflow_handle') }}
+{% endblock %}
+
+{% block body %}
+<div
+    {{ stimulus_controller('workflow--handle', {
+        fetchActionUrl: workflow.id ? path('workflow_action_get', {'workflow':workflow.id, 'step':'999999', 'action':'111111'}) : '',
+        deleteActionUrl: workflow.id ? path('workflow_action_delete', {'workflow':workflow.id, 'step':'999999', 'action':'111111'}) : '',
+        fetchStepUrl: workflow.id ? path('workflow_step_get', {'workflow': workflow.id, 'step':'999999'}),
+        deleteStepUrl: workflow.id ? path('workflow_step_delete', {'workflow': workflow.id, 'step':'999999'}),
+    }) }}
+>
+    {{ include('workflow/_handle_header_form.html.twig') }}
+    <hr class="mt-5 mb-5">
+    {% if workflow.id %}
+        <div class="row">
+            <div class="col">
+                Délais TOTAL : <strong>{{ workflow.totalCompletionTime }} jour(s)</strong> (ouvré(s))
+            </div>
+        </div>
+        <div class="table-responsive">
+            {{ include('workflow/_handle_steps.html.twig') }}
+        </div>
+        {{ include('workflow/_handle_add_step.html.twig') }}
+    {% endif %}
+
+    {{ include('workflow/_modal_add_action.html.twig') }}
+</div>
+{% endblock %}

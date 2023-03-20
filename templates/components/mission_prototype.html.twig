@@ -1,0 +1,107 @@
+<div
+    {{ attributes }}
+>
+    {{ form_start(form) }}
+    <div class="row">
+        <div class="col-12"
+            {{ stimulus_controller('order--edit') }}>
+            <div class="tab-content mt-5" id="myTabContent">
+                <div class="card pt-4 mb-6 mb-xl-9">
+                    <div class="card-body pt-0 pb-5">
+                        <span class="font-weight-bold">1. Campagne</span>
+                        <div class="form-group row mb-8 mt-5">
+                            <div class="col-lg-12 col-xl-12">
+                                {{ form_widget(form.name, {'attr':{'class':form.name.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                                {{ form_errors(form.name) }}
+                            </div>
+                        </div>
+                        <span class="font-weight-bold">2. Brief</span>
+                        <div class="form-group row mb-8 mt-5">
+                            <div class="col-lg-12 col-xl-12">
+                               {{ form_widget(form.brief, {'attr':{'class':form.brief.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                               {{ form_errors(form.brief) }}
+                           </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="header-mission">
+                                    <span class="font-weight-bold">3. Missions</span>
+                                    <button data-action="live#action" data-action-name="addItem" type="button" class="btn btn-add m-1">+ Ajouter</button>
+                                </div>
+                                <div class="table-responsive mt-5" {{ stimulus_target('order--edit', 'missionsContainer') }}>
+                                    <table class="table table-rounded table-striped border gy-7 gs-7">
+                                        <thead>
+                                        <tr class="fw-semibold fs-6 text-gray-800 border-bottom border-gray-200">
+                                            <th>Quantité</th>
+                                            <th>Produit</th>
+                                            <th>Prix Unit.</th>
+                                            <th>Libelle</th>
+                                            <th>Livraison</th>
+                                            <th>Workflow</th>
+                                            <th>Ajouter un sous-traitant</th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for key, itemForm in form.missions %}
+                                            <tr data-live-ignore>
+                                                <td>
+                                                    {{ form_widget(itemForm.quantity, {'attr':{'class':itemForm.quantity.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                                                </td>
+                                                <td>
+                                                    {{ form_widget(itemForm.product, {'attr':{'class':itemForm.product.vars.errors|length ? 'form-control is-invalid':'form-control', 'data-order--edit-target':'editProductsFormInput select2' }}) }}
+                                                </td>
+                                                <td>
+                                                    {{ form_widget(itemForm.price, {'attr':{'class':itemForm.price.vars.errors|length ? 'form-control is-invalid price-input':'form-control price-input'}}) }}
+                                                </td>
+                                                <td>
+                                                    {{ form_widget(itemForm.libelleCustom, {'attr':{'class':itemForm.libelleCustom.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                                                </td>
+                                                <td>
+                                                    {{ form_widget(itemForm.desiredDelivery, {'attr':{'class':itemForm.desiredDelivery.vars.errors|length ? 'form-control is-invalid':'form-control', 'min': "now"|date("Y-m-d") }}) }}
+                                                </td>
+                                                <td>
+                                                    {{ form_widget(itemForm.newWorkflow, {'attr':{'class':itemForm.newWorkflow.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                                                </td>
+                                                <td>
+                                                    {{ form_widget(itemForm.newSubContractor, {'attr':{'class':itemForm.newSubContractor.vars.errors|length ? 'form-control is-invalid':'form-control', 'data-order--edit-target':'newSubContractorInput'}}) }}
+                                                    {{ form_widget(itemForm.newJob, {'attr':{'class':itemForm.newJob.vars.errors|length ? 'form-control is-invalid mt-2':'form-control mt-2'}}) }}
+                                                </td>
+                                                <td>
+                                                    <button data-action="live#action" data-action-name="removeItem(index={{ itemForm.vars.value.id }})" type="button" class="btn btn-danger">X</button>
+                                                </td>
+                                            </tr>
+                                            {{ form_widget(itemForm.missionId, {'attr':{'class':itemForm.missionId.vars.errors|length ? 'form-control is-invalid mt-2':'form-control mt-2', 'value':itemForm.vars.value.id }}) }}
+                                            {% if (itemForm.vars.value.participants.count > 0) %}
+                                                <tr>
+                                                    <td colspan="9">
+                                                        <strong>Contact(s) opérationnel(s) attribué(s) à la mission :<br></strong>
+                                                        {% for participant in itemForm.vars.value.participants %}
+                                                            {{ participant.user }} {% if participant.job %}({{ participant.job.name }}){% endif %}{% if not loop.last %}<br>{% endif %}
+                                                        {% endfor %}
+                                                    </td>
+                                                </tr>
+                                            {% endif %}
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% do form.missions.setRendered %}
+    <div class="col-12 d-flex custom-flex-end">
+        {% if campaign.state in ['provisional'] and campaign.canActivate(is_granted('ROLE_ADMIN'), is_granted('ROLE_SUBCONTRACTOR')) %}
+            <a href="{{ path('campaign_transition', {'id':campaign.id, 'transition':'validate'}) }}" class="menu-link px-3 font-weight-bold btn btn-add margin-right-custom">
+                Activation
+            </a>
+        {% endif %}
+        {{ form_widget(form.classicSave, {'attr': {'class': 'btn btn-add'}}) }}
+    </div>
+    {{ form_end(form) }}
+    {{ include('mission/_modal_activate.html.twig') }}
+</div>

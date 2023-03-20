@@ -1,0 +1,361 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {% if app.request.get('_route') == 'sub_contractor_new' %}
+        Ajouter un nouveau sous-traitant
+    {% else %}
+        Fiche de {{ user.lastname }}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div id="kt_content_container" class="container-fluid" {{ stimulus_controller('subContractor--handle', {
+        fetchServiceUrl: service.id ? path('service_action_get', {'id':'999999'}) : '',
+    }) }}>
+    {{ form_start(form, {'attr':{'id':'user_form','novalidate':'novalidate','data-subContractor--handle-target':'form'}}) }}
+        <div class="titre-header" style="margin-bottom: 15px;">
+            {% if app.request.get('_route') == 'sub_contractor_new' %}
+                <h1>CREATION SOUS TRAITANT</h1>
+            {% elseif app.request.get('_route') == 'sub_contractor_edit' %}
+                <h1>MODIFICATION {{ user }}</h1>
+            {% else %}
+                <h1>MON PROFIL</h1>
+            {% endif %}
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('sub_contractor_index') }}" class="btn btn-custom-retour">Retour</a>
+            {% else %}
+                <a href="{{ path('mission_index') }}" class="btn btn-custom-retour">Retour</a>
+            {% endif %}
+        </div>
+        <div class="d-flex flex-column flex-xl-row">
+            <div class="flex-column flex-lg-row-fluid">
+                <div class="card card-flush pt-4 mb-6 me-10">
+                    <div class="card-header">
+                        <h3 class="card-title font-weight-bold">1. Identification</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column">
+                            <div class="form-group row mb-8">
+                                {{ form_label(form.gender, null, {'label_attr':{'class':'col-xl-3 col-lg-3 col-form-label'}}) }}
+                                <div class="col-lg-8 col-xl-8">
+                                    {{ form_widget(form.gender, {'attr':{'class':form.gender.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                                    {{ form_errors(form.gender) }}
+                                </div>
+                            </div>
+                            <div class="form-group row mb-8">
+                                {{ form_label(form.lastname, null, {'label_attr':{'class':'col-xl-3 col-lg-3 col-form-label'}}) }}
+                                <div class="col-lg-8 col-xl-8">
+                                    {{ form_widget(form.lastname, {'attr':{'class':form.lastname.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                                    {{ form_errors(form.lastname) }}
+                                </div>
+                            </div>
+                            <div class="form-group row mb-8">
+                                {{ form_label(form.firstname, null, {'label_attr':{'class':'col-xl-3 col-lg-3 col-form-label'}}) }}
+                                <div class="col-lg-8 col-xl-8">
+                                    {{ form_widget(form.firstname, {'attr':{'class':form.firstname.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                                    {{ form_errors(form.firstname) }}
+                                </div>
+                            </div>
+                            <div class="form-group row mb-8">
+                                {{ form_label(form.email, null, {'label_attr':{'class':'col-xl-3 col-lg-3 col-form-label'}}) }}
+                                <div class="col-lg-8 col-xl-8">
+                                    {{ form_widget(form.email, {'attr':{'class':form.email.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                                    {{ form_errors(form.email) }}
+                                </div>
+                            </div>
+                            {% if is_granted('ROLE_SUBCONTRACTOR') %}
+                                <div class="form-group row mb-8">
+                                    {{ form_label(form.plainPassword, null, {'label_attr':{'class':'col-xl-3 col-lg-3 col-form-label'}}) }}
+                                    <div class="col-lg-8 col-xl-8">
+                                        {{ form_widget(form.plainPassword, {'attr':{'class':form.plainPassword.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                                        {{ form_errors(form.plainPassword) }}
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div class="form-group row mb-8">
+                                {{ form_label(form.cellPhone, null, {'label_attr':{'class':'col-xl-3 col-lg-3 col-form-label'}}) }}
+                                <div class="col-lg-8 col-xl-8">
+                                    {{ form_widget(form.cellPhone, {'attr':{'class':form.cellPhone.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                                    {{ form_errors(form.cellPhone) }}
+                                </div>
+                            </div>
+                            <div class="form-group row mb-8">
+                                {{ form_label(form.dailyRate, null, {'label_attr':{'class':'col-xl-3 col-lg-3 col-form-label'}}) }}
+                                <div class="col-lg-4 col-xl-4">
+                                    <div class="d-flex align-items-center position-relative my-1">
+                                        <span class="svg-icon svg-icon-1 position-absolute icon-euro">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-currency-euro" viewBox="0 0 16 16">
+                                            <path d="M4 9.42h1.063C5.4 12.323 7.317 14 10.34 14c.622 0 1.167-.068 1.659-.185v-1.3c-.484.119-1.045.17-1.659.17-2.1 0-3.455-1.198-3.775-3.264h4.017v-.928H6.497v-.936c0-.11 0-.219.008-.329h4.078v-.927H6.618c.388-1.898 1.719-2.985 3.723-2.985.614 0 1.175.05 1.659.177V2.194A6.617 6.617 0 0 0 10.341 2c-2.928 0-4.82 1.569-5.244 4.3H4v.928h1.01v1.265H4v.928z"/>
+                                            </svg>
+                                        </span>
+                                        {{ form_widget(form.dailyRate, {'attr':{'class':form.dailyRate.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                                        {{ form_errors(form.dailyRate) }}
+                                    </div>
+                                </div>
+                            </div>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <div class="invalid-feedback-resale">
+                                    {{ form_errors(form.resaleRate) }}
+                                </div>
+                                <div class="form-group row mb-8">
+                                    {{ form_label(form.resaleRate, null, {'label_attr':{'class':'col-xl-3 col-lg-3 col-form-label'}}) }}
+                                    <div class="col-lg-4 col-xl-4">
+                                        <div class="d-flex align-items-center position-relative my-1">
+                                        <span class="svg-icon svg-icon-1 position-absolute icon-euro">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-currency-euro" viewBox="0 0 16 16">
+                                            <path d="M4 9.42h1.063C5.4 12.323 7.317 14 10.34 14c.622 0 1.167-.068 1.659-.185v-1.3c-.484.119-1.045.17-1.659.17-2.1 0-3.455-1.198-3.775-3.264h4.017v-.928H6.497v-.936c0-.11 0-.219.008-.329h4.078v-.927H6.618c.388-1.898 1.719-2.985 3.723-2.985.614 0 1.175.05 1.659.177V2.194A6.617 6.617 0 0 0 10.341 2c-2.928 0-4.82 1.569-5.244 4.3H4v.928h1.01v1.265H4v.928z"/>
+                                            </svg>
+                                        </span>
+                                            {{ form_widget(form.resaleRate, {'attr':{'class':form.resaleRate.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <div class="form-group row mb-8">
+                                    {{ form_label(form.jobs, null, {'label_attr':{'class':'col-xl-3 col-lg-3 col-form-label'}}) }}
+                                    {{ form_widget(form.jobs, {'attr':{'class':'form-control', 'data-subContractor--handle-target':'select2Job'}}) }}
+                                </div>
+                                <div class="form-group row mb-8">
+                                    {{ form_label(form.billingMethod, null, {'label_attr':{'class':'col-xl-3 col-lg-3 col-form-label'}}) }}
+                                    <div class="col-lg-8 col-xl-8">
+                                        {{ form_widget(form.billingMethod, {'attr':{'class':form.billingMethod.vars.errors|length ? 'form-control is-invalid':'form-control'}}) }}
+                                        {{ form_errors(form.billingMethod) }}
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div class="form-group row mb-8">
+                                {{ form_label(form.picture, null, {'label_attr':{'class':'col-xl-3 col-lg-3 col-form-label'}}) }}
+                                <div class="col-lg-8 col-xl-8">
+                                    <div class="image-input image-input-empty" data-kt-image-input="true">
+                                        <div class="image-input-wrapper w-150px h-150px" {% if user.pictureName is not empty %}style="background-image: url({{ vich_uploader_asset(user, 'picture') }})"{% endif %}></div>
+                                        <label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow edit-pp"
+                                               data-kt-image-input-action="change"
+                                               data-bs-toggle="tooltip"
+                                               data-bs-dismiss="click"
+                                               title="Modifier la photo">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                                                <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
+                                            </svg>
+
+                                            {{ form_widget(form.picture) }}
+                                            <input type="hidden" name="avatar_remove" />
+                                        </label>
+                                    </div>
+                                    {{ form_errors(form.picture) }}
+                                </div>
+                            </div>
+                            <span class="font-weight-bold">2. Type de notification</span>
+                            <div class="form-group row mb-8">
+                                {{ form_label(form.notificationType, null, {'label_attr':{'class':'col-xl-2 col-lg-2 col-form-label checkbox-custom-label'}}) }}
+                                <div class="col-lg-3 col-xl-3 back-line2">
+                                    {% for choice in form.notificationType %}
+                                        <div class="form-check">
+                                            <input class="form-check-input" name="{{ choice.vars.full_name }}" type="checkbox" value="{{ choice.vars.value }}" id="{{ choice.vars.id }}" {% if choice.vars.checked == true %}checked{% endif %}>
+                                            <label class="form-check-label" for="{{ choice.vars.full_name }}">
+                                                {{ choice.vars.label }}
+                                            </label>
+                                        </div>
+                                    {% endfor %}
+                                    {% do form.notificationType.setRendered() %}
+                                </div>
+                            </div>
+                            <span class="font-weight-bold">3. Notifications envoyées</span>
+                            <div class="form-group row mb-8">
+                                {{ form_label(form.notification, null, {'label_attr':{'class':'col-xl-2 col-lg-2 col-form-label checkbox-custom-label'}}) }}
+                                <div class="col-lg-3 col-xl-3 back-line2">
+                                    {% for choice in form.notification %}
+                                        <div class="form-check">
+                                            <input class="form-check-input" name="{{ choice.vars.full_name }}" type="checkbox" value="{{ choice.vars.value }}" id="{{ choice.vars.id }}" {% if choice.vars.checked == true %}checked{% endif %}>
+                                            <label class="form-check-label" for="{{ choice.vars.full_name }}">
+                                                {{ choice.vars.label }}
+                                            </label>
+                                        </div>
+                                    {% endfor %}
+                                    {% do form.notification.setRendered() %}
+                                </div>
+                            </div>
+                            <span class="font-weight-bold">3. Fréquence des notifications</span>
+                            <div class="form-group row mb-8">
+                                {{ form_label(form.freqNotification, null, {'label_attr':{'class':'col-xl-2 col-lg-2 col-form-label checkbox-custom-label'}}) }}
+                                <div class="col-lg-3 col-xl-3 back-line2">
+                                    {% for choice in form.freqNotification %}
+                                        <div class="form-check">
+                                            <input class="form-check-input" name="{{ choice.vars.full_name }}" type="radio" value="{{ choice.vars.value }}" id="{{ choice.vars.id }}" {% if choice.vars.checked == true %}checked{% endif %}>
+                                            <label class="form-check-label" for="{{ choice.vars.full_name }}">
+                                                {{ choice.vars.label }}
+                                            </label>
+                                        </div>
+                                    {% endfor %}
+                                    {% do form.freqNotification.setRendered() %}
+                                </div>
+                            </div>
+                            <div class="section-btn {% if is_granted('ROLE_ADMIN') == false %}groupe-button-1{% else %}groupe-button-2{% endif %}">
+                                {% if is_granted('ROLE_ADMIN') == false %}
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#remove_subContractor_{{ user.id }}">Supprimer mon compte</button>
+                                {% endif %}
+                                <div>
+                                    <button
+                                        style="margin-right: 15px;"
+                                        type="button"
+                                        class="btn btn-primary-custom font-weight-bold"
+                                        data-kt-stepper-action="submit"
+                                        {{ stimulus_action('subContractor--handle', 'submitForm') }}
+                                    >
+                                    <span class="indicator-label">
+                                        Enregistrer
+                                    </span>
+                                        <span class="indicator-progress">
+                                    Enregistrement en cours... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                </span>
+                                    </button>
+                                    <a href="{{ path('sub_contractor_index') }}" class="btn btn-custom-retour">Annuler</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if user.email is not empty %}
+                <div class="flex-lg-row-fluid">
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="kt_contact_view_overview_tab" role="tabpanel">
+                            <div class="card card-flush pt-4 mb-6">
+                                <div class="card-header">
+                                    <h3 class="card-title font-weight-bold">2. Liste des services</h3>
+                                    <div class="card-toolbar">
+                                        <a type="button" class="btn btn-primary-custom font-weight-bold" data-bs-toggle="modal" data-bs-target="#addServiceModal" {{ stimulus_action('subContractor--handle','addService','click') }}>
+                                            Ajouter
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="card-body pt-0 pb-5">
+                                    <table id="kt_datatable_example_1" class="table table-row-bordered gy-5">
+                                        <thead>
+                                        <tr class="fw-bold fs-6 text-muted">
+                                            <th>Nom du produit</th>
+                                            {% if user.billingMethod != constant('\\App\\Enum\\BillingMethod::BILL_TIME_PAST').value %}
+                                                <th>Tarif pratiqué</th>
+                                                {% if is_granted('ROLE_ADMIN') %}
+                                                    <th>Tarif myFlow</th>
+                                                    <th>Marge</th>
+                                                {% endif %}
+                                            {% endif %}
+                                            <th class="text-end">Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for service in servicesSubContractor %}
+                                                <tr>
+                                                    <td>{{ service.product.name }}</td>
+                                                    {% if user.billingMethod != constant('\\App\\Enum\\BillingMethod::BILL_TIME_PAST').value %}
+                                                        <td>
+                                                            {% if service.product.type == constant('\\App\\Enum\\ProductType::AU_FORFAIT') %}
+                                                                {{ service.price }} €
+                                                            {% else %}
+                                                                A définir
+                                                            {% endif %}
+                                                        </td>
+                                                        {% if is_granted('ROLE_ADMIN') %}
+                                                            <td>
+                                                                {% if service.product.type == constant('\\App\\Enum\\ProductType::AU_FORFAIT') %}
+                                                                    {% if service.resale is not empty %}{{ service.resale }} €{% endif %}
+                                                                {% else %}
+                                                                    A définir
+                                                                {% endif %}
+                                                            </td>
+                                                            <td class="fw-boldest {% if service.resale - service.price > 0 %}text-my-flow{% else %}text-primary{% endif %}">
+                                                                {% if service.product.type == constant('\\App\\Enum\\ProductType::AU_FORFAIT') %}
+                                                                    {% if service.resale is not empty %}{% if service.resale - service.price > 0 %}+{% endif %} {{ service.resale - service.price }} € {% endif %}
+                                                                {% endif %}
+                                                            </td>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                    <td class="text-end">
+                                                        <button type="button" class="btn btn-sm"
+                                                                data-kt-menu-trigger="click"
+                                                                data-kt-menu-placement="bottom-start">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                                                                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                                                            </svg>
+                                                        </button>
+                                                        <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-200px py-4"
+                                                             data-kt-menu="true">
+                                                            <div class="menu-item px-3">
+                                                                <a type="button" class="menu-link px-3" data-bs-toggle="modal" data-bs-target="#addServiceModal" data-service-id="{{ service.id }}" {{ stimulus_action('subContractor--handle','editService','click') }}>
+                                                                    Modifier
+                                                                </a>
+                                                                <a href="" class="btn menu-link px-3" data-bs-toggle="modal" data-bs-target="#deleteDoc{{ service.id }}">
+                                                                    Retirer
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="card card-flush pt-4 mb-6">
+                                <div class="card-header">
+                                    <h3 class="card-title font-weight-bold">3. Liste des clients associés</h3>
+                                </div>
+                                <div class="card-body pt-0 pb-5">
+                                    <table id="kt_datatable_example_1" class="table table-row-bordered gy-5">
+                                        <thead>
+                                        <tr class="fw-bold fs-6 text-muted">
+                                            <th>Nom du client</th>
+                                            <th>Produit</th>
+                                            <th>Métier</th>
+                                            {% if is_granted('ROLE_ADMIN') %}
+                                                <th class="text-end">Action</th>
+                                            {% endif %}
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for link in user.subContractorCompanies %}
+                                            <tr>
+                                                <td>{{ link.company.name }}</td>
+                                                <td>{{ link.products|join(', ') }}</td>
+                                                <td>{{ link.jobs|join(', ') }}</td>
+                                                {% if is_granted('ROLE_ADMIN') %}
+                                                    <td class="text-end">
+                                                        <button type="button" class="btn btn-sm btn-light"
+                                                                data-kt-menu-trigger="click"
+                                                                data-kt-menu-placement="bottom-start">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                                                                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                                                            </svg>
+                                                        </button>
+                                                        <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-200px py-4"
+                                                             data-kt-menu="true">
+                                                            <div class="menu-item px-3">
+                                                                <a href="javascript:;" class="menu-link px-3" {{ stimulus_action('subContractor--handle', 'editCompanyJobs') }} data-url="{{ path('subcontractor_edit_jobs', {'subContractor': user.id, 'jobs': link.id}) }}" data-jobs="{% for job in link.jobs %}{{ job.id }}{% if not loop.last %},{% endif %}{% endfor %}" data-products="{% for product in link.products %}{{ product.id }}{% if not loop.last %},{% endif %}{% endfor %}">
+                                                                    Modifier
+                                                                </a>
+                                                            </div>
+                                                            <div class="menu-item px-3">
+                                                                <a href="{{ path('sub_contractor_delete_link', {'subContractorId': user.id, 'linkId': link.id}) }}" class="menu-link px-3" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette association ?');">
+                                                                    Supprimer
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                {% endif %}
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    {{ form_end(form) }}
+        {{ include('sub_contractor/_modal_service.html.twig') }}
+        {{ include('sub_contractor/_modal_company_jobs.html.twig') }}
+        {{ include('sub_contractor/_delete_service.html.twig') }}
+        {{ include('sub_contractor/_modal_remove.html.twig') }}
+    </div>
+{% endblock %}

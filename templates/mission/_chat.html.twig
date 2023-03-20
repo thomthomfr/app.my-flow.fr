@@ -1,0 +1,119 @@
+<div class="card mb-5" style="margin-right: 25px;">
+    <div class="card-body">
+        <div class="row justify-content-start">
+            <div class="col">
+                <h3 class="titre-box-echange-mission text-center">ECHANGES ENTRE VOUS ET LE PRESTATAIRE</h3>
+                <div class="form-group row mb-8 mt-8">
+                    <div class="box-chat">
+                        <div class="scroll h-400px px-5" id="scroll-chat" {{ stimulus_target('message--handle','scrollChat') }}>
+                            {% for message in messages %}
+                                {% if message.user.id == app.user.id %}
+                                    <div class="my-message-box mt-5">
+                                        <div class="me">
+                                            <div class="my-identity">
+                                                <b>{% if message.user.pictureName is not empty %}
+                                                        <img src="{{ vich_uploader_asset(message.user, 'picture') }}" style="width: 35px; height:35px; border-radius: 5px;">
+                                                    {% else %}
+                                                        <div class="symbol symbol-35px">
+                                                            <div class="symbol-label fs-2 fw-bold text-primary">
+                                                                {{ message.user.firstname|slice(0,1)|upper }}{{ message.user.lastname|slice(0,1)|upper }}
+                                                            </div>
+                                                        </div>
+                                                    {% endif %} Vous avez répondu :</b>
+                                                <span>{{ message.createdAt|date('d/m/Y H:i') }}</span>
+                                            </div>
+                                            {% if message.content is not empty %}
+                                                <div class="my-message mt-2">
+                                                    <p>{{ message.content|raw }}</p>
+                                                </div>
+                                            {% endif %}
+                                            {% if message.fileMessages is not empty %}
+                                                <div class="my-files mt-4">
+                                                    <h3 class="mt-4">Fichiers joints au message</h3>
+                                                    <div class="table-responsive">
+                                                        <table class="table">
+                                                            <tbody>
+                                                            {% for file in message.fileMessages %}
+                                                                <tr>
+                                                                    <td class="custom-table2"><img src="{{ asset('build/media/mission/file.png') }}"/><a href="{{ asset('uploads/mission/' ~ mission.id ~ '/message/' ~ file.name) }}" target="_blank">{{ file.name }}</a></td>
+                                                                    <td class="text-end"><a href="{{ asset('uploads/mission/' ~ mission.id ~ '/message/' ~ file.name) }}" download><button class="btn btn-sm btn-light custom-mr"><i class="fas fa-download"></i></button></a></td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="you-message-box mt-5">
+                                        <div class="you">
+                                            <div class="you-identity">
+                                                <b>{% if message.user.pictureName is not empty %}
+                                                        <img src="{{ vich_uploader_asset(message.user, 'picture') }}" style="width: 35px; height:35px; border-radius: 5px;">
+                                                    {% else %}
+                                                        <div class="symbol symbol-35px">
+                                                            <div class="symbol-label fs-2 fw-bold text-primary">
+                                                                {{ message.user.firstname|slice(0,1)|upper }}{{ message.user.lastname|slice(0,1)|upper }}
+                                                            </div>
+                                                        </div>
+                                                    {% endif %} {{ message.user.firstname}} a répondu :</b>
+                                                <span>{{ message.createdAt|date('d/m/Y H:i') }}</span>
+                                            </div>
+                                            {% if message.content is not empty %}
+                                                <div class="my-message mt-2">
+                                                    <p>{{ message.content|raw }}</p>
+                                                </div>
+                                            {% endif %}
+                                            {% if message.fileMessages is not empty %}
+                                                <div class="you-files mt-4">
+                                                    <h3 class="mt-4">Fichiers joints au message</h3>
+                                                    <div class="table-responsive">
+                                                        <table class="table">
+                                                            <tbody>
+                                                            {% for file in message.fileMessages %}
+                                                                <tr>
+                                                                    <td class="custom-table2"><img src="{{ asset('build/media/mission/file.png') }}"/><a href="{{ asset('uploads/mission/' ~ mission.id ~ '/message/' ~ file.name) }}" target="_blank">{{file.name }}</a></td>
+                                                                    <td class="text-end"><a href="{{ asset('uploads/mission/' ~ mission.id ~ '/message/' ~ file.name) }}" download><button class="btn btn-sm btn-light custom-mr"><i class="fa-solid fa-xmark"></i></button></a></td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{ form_start(form, {'attr':{'id':'message_form','novalidate':'novalidate','data-message--handle-target':'form'}}) }}
+        {{ form_widget(form.content, {'attr':{'class':form.content.vars.errors|length ? 'form-control is-invalid':'form-control mb-5 content-chatbox'}}) }}
+        <div class="section-btn-chat-mission d-flex">
+            <div class="parent-div">
+                <button type="button" class="btn btn-transparant btn-join-file-chat mt-5">Joindre des fichiers</button>
+                {{ form_widget(form.fileMessages, {'attr':{'class':form.fileMessages.vars.errors|length ? 'form-control is-invalid':'form-control btn btn-transparant btn-join-file-chat mt-5','data-message--handle-target':'filesInput'}}) }}
+                <span {{ stimulus_target('message--handle','filesNameSpan') }}></span>
+            </div>
+            <button
+                type="submit"
+                class="btn btn-primary-custom mt-5 h-50px font-weight-bold"
+                data-kt-stepper-action="submit"
+                {{ stimulus_action('messsage--handle', 'submitForm') }}
+            >
+                <span class="indicator-label">
+                    Répondre
+                </span>
+                <span class="indicator-progress">
+                    Envoie de la réponse... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                </span>
+            </button>
+        </div>
+        {{ form_end(form) }}
+    </div>
+</div>

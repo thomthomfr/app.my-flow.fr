@@ -1,0 +1,53 @@
+{{ form_start(form, {'attr':{'data-workflow--handle-target':'form'}}) }}
+<div class="titre-header">
+    <p>&nbsp;</p>
+    <div class="d-flex align-items-center position-relative my-1">
+        <h1>GESTION DES PROCESS</h1>
+    </div>
+    <button
+        type="button"
+        class="btn btn-primary-custom font-weight-bold btn-add-process"
+        {{ stimulus_action('workflow--handle', 'submitForm') }}
+    >
+                <span class="indicator-label">
+                    Enregistrer
+                </span>
+        <span class="indicator-progress">
+                    Enregistrement en cours... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                </span>
+    </button>
+</div>
+<div class="row mt-5">
+    <div class="col">
+        <div class="form-group row">
+            <div class="col-12">
+                {{ form_row(form.name, {'label_attr':{'class':'form-label'},'attr':{'class':'form-control mb-5'}}) }}
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group row">
+            <div class="col-12">
+                {{ form_row(form.product, {'label_attr':{'class':'form-label'},'attr':{'class':'form-control mb-5'}}) }}
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group row">
+            <div class="col-12">
+                {{ form_row(form.company, {'label_attr':{'class':'form-label'},'attr':{'class':'form-control mb-5'}}) }}
+            </div>
+        </div>
+    </div>
+    <div class="col d-flex">
+        <div class="form-group row">
+            <div class="col-12 d-flex">
+                <div class="form-check form-switch form-check-custom form-check-solid">
+                    {{ form_widget(form.active) }}
+                    {{ form_label(form.active, null) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ form_end(form) }}

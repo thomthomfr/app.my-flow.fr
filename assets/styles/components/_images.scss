@@ -1,0 +1,16 @@
+.image-input-wrapper{
+  background-color: $custom-grey-photo;
+}
+.image-input [data-kt-image-input-action=change]{
+  top: 40px;
+  right: 40px;
+  color: $custom-grey-add-photo;
+}
+.vich-image a{
+  display: none;
+}
+.edit-pp{
+  position: absolute!important;
+  top: -10px!important;
+  right: -10px!important;
+}

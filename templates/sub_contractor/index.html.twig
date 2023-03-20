@@ -1,0 +1,132 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des sous-traitants{% endblock %}
+
+{% block styles %}
+    {{ encore_entry_link_tags('plugins/custom/datatables/datatables.bundle') }}
+{% endblock %}
+
+{% block body %}
+    <div id="kt_content_container" class="container-fluid" {{ stimulus_controller('client--index') }}>
+        <div class="titre-header">
+            {% if app.request.get('_route') == 'sub_contractor_index' %}
+                <h1>Liste sous traitants</h1>
+                <div class="d-flex align-items-center position-relative my-1" id="section-top-presta">
+            <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <rect x="0" y="0" width="24" height="24" />
+                        <path d="M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                        <path d="M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z" fill="#000000" fill-rule="nonzero" />
+                    </g>
+                </svg>
+            </span>
+                    <input type="text"
+                           style="margin-right: 10px;"
+                           class="form-control form-control w-600px ps-15 input-search"
+                           placeholder="Rechercher ..."
+                            {{ stimulus_action('client--index', 'searchTable', 'keyup') }}
+                    />
+                    <input type="text"
+                           id="tarif-min"
+                           name="min"
+                           style="margin-right: 5px;"
+                           class="form-control form-control w-150px ps-15"
+                           placeholder="Tarif mini"
+                        {{ stimulus_action('client--index', 'searchTarif', 'keyup') }}
+                    />
+                    <input type="text"
+                           id="tarif-max"
+                           name="max"
+                           class="form-control form-control w-150px ps-15"
+                           placeholder="Tarif max"
+                        {{ stimulus_action('client--index', 'searchTarif', 'keyup') }}
+                    />
+                </div>
+                <a href="{{ path('sub_contractor_new') }}" class="btn btn-primary-custom font-weight-bold btn-add-presta">Ajouter</a>
+            {% endif %}
+        </div>
+        <div class="card shadow-sm mt-5">
+            <div class="card-body">
+                <table id="kt_datatable_example_1" class="table table-row-bordered gy-5" {{ stimulus_target('client--index','datatable') }}>
+                    <thead>
+                    <tr class="fw-bold fs-6 text-muted">
+                        <th>Photo</th>
+                        <th>Nom</th>
+                        <th>Téléphone</th>
+                        <th>E-mail</th>
+                        <th>Métier</th>
+                        <th>Fonctionnement</th>
+                        <th>Tarif associé</th>
+                        <th>Statut</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for subContractor in subContractors %}
+                        <tr>
+                            <td>
+                                {% if subContractor.pictureName is not empty %}
+                                    <img src="{{ vich_uploader_asset(subContractor, 'picture') }}" style="width: 35px; height:35px; border-radius: 5px;">
+                                {% else %}
+                                    <div class="symbol symbol-35px">
+                                        <div class="symbol-label fs-2 fw-bold text-primary">
+                                            {{ subContractor.firstname|slice(0,1) }}{{ subContractor.lastname|slice(0,1) }}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </td>
+                            <td>{{ subContractor.firstname }} {{ subContractor.lastname }}</td>
+                            <td>{{ subContractor.cellPhone }}</td>
+                            <td><a class="text-decoration-underline" href="mailto:{{ subContractor.email }}">{{ subContractor.email }}</a></td>
+                            <td>
+                                {{ subContractor.jobs|join(', ') }}
+                            </td>
+                            <td>
+                                {% if subContractor.billingMethod == 1 %}
+                                    Facturation au temps passé
+                                {% else %}
+                                    Facturation à la prestation
+                                {% endif%}
+                            </td>
+                            <td>{{ subContractor.dailyRate }} €</td>
+                            <td>
+                                {% if subContractor.enabled == 0 %}
+                                    En attente
+                                {% elseif subContractor.resaleRate is empty %}
+                                    A completer
+                                {% elseif subContractor.resaleRate is not empty and subContractor.enabled == true %}
+                                    Actif
+                                {% endif %}
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-light"
+                                        data-kt-menu-trigger="click"
+                                        data-kt-menu-placement="bottom-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                                        <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                                    </svg>
+                                </button>
+                                <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-200px py-4"
+                                     data-kt-menu="true">
+                                    <div class="menu-item px-3">
+                                        <a href="{{ path('sub_contractor_edit', {'id':subContractor.id}) }}" class="menu-link px-3">
+                                            Modifier
+                                        </a>
+                                    </div>
+                                    {% if subContractor.enabled == 0 %}
+                                        <div class="menu-item px-3">
+                                            <a href="{{ path('sub_contractor_resend_registration_email', {'id':subContractor.id}) }}" class="menu-link px-3">
+                                                Renvoyer l'email d'inscription
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+
+<html lang="en" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+    <title></title>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <!--[if mso]><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch><o:AllowPNG/></o:OfficeDocumentSettings></xml><![endif]-->
+    <!--[if !mso]><!-->
+    <link href="https://fonts.googleapis.com/css?family=Cabin" rel="stylesheet" type="text/css"/>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css"/>
+    <!--<![endif]-->
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Cabin';
+        }
+
+        a[x-apple-data-detectors] {
+            color: inherit !important;
+            text-decoration: inherit !important;
+        }
+
+        #MessageViewBody a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        p {
+            line-height: inherit
+        }
+
+        @media (max-width:670px) {
+            .icons-inner {
+                text-align: center;
+            }
+
+            .icons-inner td {
+                margin: 0 auto;
+            }
+
+            .row-content {
+                width: 100% !important;
+            }
+
+            .column .border {
+                display: none;
+            }
+
+            table {
+                table-layout: fixed !important;
+            }
+
+            .stack .column {
+                width: 100%;
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body style="background-color: #000000; margin: 0; padding: 0; -webkit-text-size-adjust: none; text-size-adjust: none;">
+<table border="0" cellpadding="0" cellspacing="0" class="nl-container" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #000000;" width="100%">
+    <tbody>
+    <tr>
+        <td>
+            <table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-1" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #f1f5f8;" width="100%">
+                <tbody>
+                <tr>
+                    <td>
+                        <table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #000000; width: 650px;" width="650">
+                            <tbody>
+                            <tr>
+                                <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; padding-top: 5px; padding-bottom: 5px; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
+                                    <table border="0" cellpadding="0" cellspacing="0" class="image_block" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
+                                        <tr>
+                                            <td style="padding-bottom:15px;padding-top:15px;width:100%;padding-right:0px;padding-left:0px;">
+                                                <div align="left" style="line-height:10px"><img alt="MyFlow" src="{{ absolute_url(asset('build/media/logo-myflow.png')) }}" style="display: block; height: auto; border: 0; width: 195px; max-width: 100%;" title="MyFlow" width="195"/></div>
+                                                <hr class="mt-5" style="height: 5px;background-color: #E6EDF5;display: block;border: 0;" width="100%">
+                                                <div align="center" class="mt-5"><h2 style="font-weight: normal;">UNE NOUVELLE MISSION POUR VOUS</h2><hr style="height: 5px;background-color: #06065C;display: block;border: 0; margin-top: -15px;" width="70%"></div>
+                                                <div align="left" style="margin-top: 25px;">Nous avons une mission de {{ mission.product.name }} à vous confier, cela vous interesse ?</div>
+                                                <div align="left" style="margin-top: 25px;">Voici la liste des choses à faire :</div>
+                                            </td>
+                                        </tr>
+                                        <tr style="display: flex;justify-content: space-evenly;position: relative;left: -129px;">
+                                            <td style="padding-bottom:15px;padding-top:15px;padding-right:0px;padding-left:0px;">
+                                                MISSION
+                                            </td>
+                                            <td style="padding-bottom:15px;padding-top:15px;padding-right:0px;padding-left:0px;">
+                                                DÉLAIS DE RÉALISATION
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <hr style="height: 5px;background-color: #06065C;display: block;border: 0; margin-top: -15px;" width="100%">
+                                            </td>
+                                        </tr>
+                                        <tr style="display: flex;justify-content: space-evenly;position: relative;left: -125px;">
+                                            <td style="padding-bottom:15px;padding-top:15px;padding-right:0px;padding-left:0px;">
+                                                {{ mission.product.name }}
+                                            </td>
+                                            <td style="padding-bottom:15px;padding-top:15px;padding-right:0px;padding-left:0px;">
+                                                <span style="display: flex;position: relative;right: 23px;">{{ nbDays }} Jour{% if nbDays > 1 %}s{% endif %}</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-2" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #f1f5f8; background-size: auto;" width="100%">
+                <tbody>
+                <tr>
+                    <td>
+                        <table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-size: auto;color: #000000; width: 650px;" width="650">
+                            <tbody>
+                            <tr>
+                                <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top;padding-bottom: 0px; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
+                                    <table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #000000; width: 650px;" width="650">
+                                        <tbody>
+                                        <tr>
+                                            <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; padding-top: 5px; padding-bottom: 5px; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
+                                                <table border="0" cellpadding="0" cellspacing="0" class="image_block" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
+                                                    <tr>
+                                                        <td style="padding-top:15px;width:100%;padding-right:0px;padding-left:0px;">
+                                                            <div align="center" class="mt-5"><h2 style="font-weight: normal;">Potentiel à gagner : <span style="color: #06065C;font-weight: bold;">{{ mission.price }} € !</span></h2></div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr style="display: flex;justify-content: space-evenly;">
+                                                        <td style="padding-bottom:15px;padding-top:15px;padding-right:0px;padding-left:0px;">
+                                                            <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{{ missionUrl }}" style="height:54px;width:223px;v-text-anchor:middle;" arcsize="0%" strokeweight="0.75pt" strokecolor="#DFE6E9" fillcolor="#DFE6E9"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#ffffff; font-family:Arial, sans-serif; font-size:14px"><![endif]--><a href="{{ missionUrl }}" style="font-weight:bold;text-decoration:none;display:inline-block;color:#ffffff;background-color:#AAA7BA;border-radius:15px;width:auto;border-top:1px solid #AAA7BA;border-right:1px solid #DFE6E9;border-bottom:1px solid #DFE6E9;border-left:1px solid #DFE6E9;padding-top:10px;padding-bottom:10px;font-family:'Cabin', Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:center;mso-border-alt:none;word-break:keep-all;" target="_blank"><span style="padding-left:40px;padding-right:40px;font-size:14px;display:inline-block;letter-spacing:normal;"><span style="font-size: 16px; line-height: 2; word-break: break-word; mso-line-height-alt: 32px;"><span data-mce-style="font-size: 20px; line-height: 28px;" style="font-size: 20px; line-height: 28px;">Voir la mission</span></span></span></a>
+                                                            <!--[if mso]></center></v:textbox></v:roundrect><![endif]-->
+                                                        </td>
+                                                        <td style="padding-bottom:15px;padding-top:15px;padding-right:0px;padding-left:0px;">
+                                                            <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{{ refuseUrl }}" style="height:54px;width:223px;v-text-anchor:middle;" arcsize="0%" strokeweight="0.75pt" strokecolor="#DFE6E9" fillcolor="#DFE6E9"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#ffffff; font-family:Arial, sans-serif; font-size:14px"><![endif]--><a href="{{ refuseUrl }}" style="font-weight:bold;text-decoration:none;display:inline-block;color:#ffffff;background-color:#AAA7BA;border-radius:15px;width:auto;border-top:1px solid #AAA7BA;border-right:1px solid #DFE6E9;border-bottom:1px solid #DFE6E9;border-left:1px solid #DFE6E9;padding-top:10px;padding-bottom:10px;font-family:'Cabin', Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:center;mso-border-alt:none;word-break:keep-all;" target="_blank"><span style="padding-left:40px;padding-right:40px;font-size:14px;display:inline-block;letter-spacing:normal;"><span style="font-size: 16px; line-height: 2; word-break: break-word; mso-line-height-alt: 32px;"><span data-mce-style="font-size: 20px; line-height: 28px;" style="font-size: 20px; line-height: 28px;">Je décline</span></span></span></a>
+                                                            <!--[if mso]></center></v:textbox></v:roundrect><![endif]-->
+                                                        </td>
+                                                        <td style="padding-bottom:15px;padding-top:15px;padding-right:0px;padding-left:0px;">
+                                                            <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{{ validateUrl }}" style="height:54px;width:223px;v-text-anchor:middle;" arcsize="0%" strokeweight="0.75pt" strokecolor="#f975c4" fillcolor="#f975c4"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#ffffff; font-family:Arial, sans-serif; font-size:14px"><![endif]--><a href="{{ validateUrl }}" style="font-weight:bold;text-decoration:none;display:inline-block;color:#ffffff;background-color:#f975c4;border-radius:15px;width:auto;border-top:1px solid #f975c4;border-right:1px solid #f975c4;border-bottom:1px solid #f975c4;border-left:1px solid #f975c4;padding-top:10px;padding-bottom:10px;font-family:'Cabin', Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:center;mso-border-alt:none;word-break:keep-all;" target="_blank"><span style="padding-left:40px;padding-right:40px;font-size:14px;display:inline-block;letter-spacing:normal;"><span style="font-size: 16px; line-height: 2; word-break: break-word; mso-line-height-alt: 32px;"><span data-mce-style="font-size: 20px; line-height: 28px;" style="font-size: 20px; line-height: 28px;">J'accepte</span></span></span></a>
+                                                            <!--[if mso]></center></v:textbox></v:roundrect><![endif]-->
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-3" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #110140;" width="100%">
+                <tbody>
+                <tr>
+                    <td>
+                        <table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #000000; width: 650px;" width="650">
+                            <tbody>
+                            <tr>
+                                <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; padding-top: 5px; padding-bottom: 10px; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
+                                    <table border="0" cellpadding="5" cellspacing="0" class="divider_block" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
+                                        <tr>
+                                            <td>
+                                                <div align="center">
+                                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
+                                                        <tr>
+                                                            <td class="divider_inner" style="font-size: 1px; line-height: 1px; border-top: 0px solid #BBBBBB;"><span> </span></td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table border="0" cellpadding="0" cellspacing="0" class="text_block" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;" width="100%">
+                                        <tr>
+                                            <td>
+                                                <div style="font-family: sans-serif">
+                                                    <div class="txtTinyMce-wrapper" style="font-size: 12px; mso-line-height-alt: 14.399999999999999px; color: #181c32; line-height: 1.2; font-family: Arial, Helvetica Neue, Helvetica, sans-serif;">
+                                                        <div align="left" style="line-height:10px"><img alt="MyFlow" src="{{ absolute_url(asset('build/media/my-flow-logo-white.png')) }}" style="display: block; height: auto; border: 0; width: 195px; max-width: 100%;" title="MyFlow" width="195"/></div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+    </tbody>
+</table><!-- End -->
+</body>
+</html>

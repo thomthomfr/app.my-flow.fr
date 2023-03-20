@@ -1,0 +1,61 @@
+{{ form_start(formInitialTime) }}
+<div class="modal fade" tabindex="-1" id="modal_temps_initial">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header custom-header">
+                <h5 class=" text-center">TEMPS INITIAL</h5>
+                <button class="btn btn-sm btn-light custom-mr btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body text-center">
+                <div class="input-group mb-5">
+                    {{ form_widget(formInitialTime.initialTime, {'attr': {'class':'form-control'}}) }}
+                    <span class="input-group-text" id="basic-addon2">minute(s)</span>
+                    {{ form_errors(formInitialTime.initialTime) }}
+                </div>
+                <div class="bouton-validate">
+                    <button
+                        type="submit"
+                        class="btn btn-primary-custom mt-5"
+                    >
+                         <span class="indicator-label">
+                              Je valide
+                         </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ form_end(formInitialTime) }}
+
+{{ form_start(formRealTime) }}
+<div class="modal fade" tabindex="-1" id="modal_temps_reel_passer">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header custom-header">
+                <h5 class=" text-center">TEMPS RÉEL PASSÉ</h5>
+                <button class="btn btn-sm btn-light custom-mr btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body text-center">
+                <div class="input-group mb-5">
+                    {{ form_widget(formRealTime.realTime, {'attr': {'class':'form-control'}}) }}
+                    <span class="input-group-text" id="basic-addon2">minute(s)</span>
+                    {{ form_errors(formRealTime.realTime) }}
+                </div>
+                <div class="bouton-validate">
+                    <button
+                        type="submit"
+                        class="btn btn-primary-custom mt-5"
+                    >
+                         <span class="indicator-label">
+                              Je valide
+                         </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ form_end(formRealTime) }}

@@ -1,0 +1,157 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Récapitulatif campagne
+{% endblock %}
+
+{% block body %}
+    <div id="kt_content_container" class="container">
+        <div class="card card-flush shadow-sm card-global-recap">
+            <h3 class="text-center titre-recap mt-5">RÉCAPITULATIF</h3>
+            <div class="card-body py-5 mt-5">
+                <div class="top-recap d-flex">
+                    <p>
+                        {% if campaign.company.logoName is not empty %}<img src="{{ vich_uploader_asset(campaign.company, 'logoFile') }}" style="width: 75px; height:75px; border-radius: 15px;">{% endif %}
+                        <span class="fs-1 fw-bolder">Projet : {{ campaign.name }}</span>
+                        <br>
+                        <span class="small-date">Date de commande : {{ campaign.createdAt|date('d.m.Y') }}</span>
+                    </p>
+                    <div class="btn-top">
+                        <a href="{{ path('campaign_transition', {'id': campaign.id,'transition': 'cancel'} )}}" type="button" class="btn btn-primary2-custom">J'annule</a>
+                        <a href="{{ path('campaign_accept_all', {'id': campaign.id} )}}" type="button" class="btn btn-primary-custom font-weight-bold">Je valide ma commande</a>
+                    </div>
+                </div>
+                <div class="row card-brief-pj">
+                    <div class="col">
+                        <div class="card shadow-sm card-brief">
+                            <div class="card-header card-brief-top">
+                                <h3>Brief déposé</h3>
+                            </div>
+                            <div class="card-body card-brief-corp">
+                                <p>{{ campaign.brief }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card shadow-sm card-brief">
+                            <div class="card-header card-brief-top">
+                                <h3>Pièces jointes</h3>
+                            </div>
+                            <div class="card-body card-brief-corp piece-jointe">
+                                {% for file in campaign.missions.first.fileMissions %}
+                                    <p class="detail-pj">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-file-earmark-text" viewBox="0 0 16 16">
+                                            <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
+                                            <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+                                        </svg>
+                                        <a href="{{ asset('uploads/mission/' ~ file.mission.id ~ '/' ~ file.name) }}" download class="text-black">{{ file.name }}</a>
+                                    </p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 5rem;">
+                    <div class="col">
+                        {% if text is not empty %}
+                            <div class="card card-solde">
+                                <div class="solde d-flex mt-3">
+                                    <p class="ml-custom">{{ text }}</p>
+                                    <p class="mr-custom text-pink fw-bolder">{{ balance }} {{ currency }}</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% set display = false %}
+                        {% for mission in campaign.missions %}
+                            {% if mission.product.type == constant('\\App\\Enum\\ProductType::A_EVALUER') %}
+                                {% set display = true %}
+                            {% endif %}
+                        {% endfor %}
+                        <div class="card shadow-sm" style="position: relative;top: -4px;">
+                            <div class="card-header card-brief-top table-responsive" style="padding-left: 0;padding-right: 0;">
+                            <table class="table table-row-bordered" style="margin-bottom: 0;">
+                                <thead>
+                                <tr class="fw-bold text-white font-weight-bold align-center table-name">
+                                    <th>Produits commandés</th>
+                                    <th>Quantité</th>
+                                    <th>Prix HT</th>
+                                    <th>Planning de livraison*</th>
+                                    <th>Equipe de production</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for mission in campaign.missions %}
+                                    <tr class="card-body card-brief-corp table-content">
+                                        <td class="font-weight-bold product-name">{{ mission.product.name }}</td>
+                                        <td class="mission-quantity fw-bolder">{{ mission.quantity }}</td>
+                                        <td class="mission-price fw-bolder">{{ mission.price }} {{ currency }}</td>
+                                        <td class="mission-delivery"><span>=></span> {{ mission.desiredDelivery|date('d.m.Y') }}</td>
+                                        <td>
+                                            {% for participant in mission.participants|filter(p => p.role == constant('\\App\\Enum\\Role::ROLE_SUBCONTRACTOR')) %}
+                                                {% if participant.user and participant.user.pictureName is not empty %}
+                                                    <img src="{{ vich_uploader_asset(participant.user, 'picture') }}" style="width: 35px; height:35px; border-radius: 5px; margin-right: 5px;">
+                                                {% elseif participant.user %}
+                                                    <div class="symbol symbol-35px">
+                                                        <div class="symbol-label fs-2 fw-bold text-primary">
+                                                            {{ participant.user.firstname|slice(0,1)|upper }}{{ participant.user.lastname|slice(0,1)|upper }}
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                        <span class="badge badge-white badge-text">*Date potentielle de livraison. Sous réserve de brief complet. Valable sous condition du respect des délais de validation par le client.</span>
+                    </div>
+                </div>
+                <div class="participants">
+                    <div class="card shadow-sm">
+                        <div class="card-header table-responsive card-observateur-validateur-top" style="padding-left: 0;padding-right: 0;">
+                            <table class="table table-row-bordered" style="margin-bottom: 0;">
+                                <thead>
+                                <tr class="fw-bold text-white font-weight-bold align-center table-name">
+                                    <th>Participants</th>
+                                    <th>Statut</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for mission in campaign.missions %}
+                                    {% for participant in mission.participants %}
+                                        {% if participant.role.value == 'ROLE_VALIDATOR' or participant.role.value == 'ROLE_OBSERVER' %}
+                                            <tr class="card-body card-observateur-validateur-corp table-content">
+                                                <td class="role-participants">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                                                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                                                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                                                    </svg>
+                                                    <span class="ms-3">{{ participant.user.email }}</span>
+                                                </td>
+                                                <td class="role-participants">
+                                                    {% if participant.role.value == 'ROLE_VALIDATOR' %}
+                                                        <p class="role-participants">Validateur*</p>
+                                                    {% else %}
+                                                        <p class="role-participants">Observateur</p>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <span class="badge badge-white badge-text">*L'aval des "Validateurs" sera demandé à chaque étape de validation importante.</span>
+                </div>
+                <div class="btn-bot d-flex custom-flex-end">
+                    <a href="{{ path('campaign_transition', {'id': campaign.id,'transition': 'cancel'} )}}" type="button" class="btn btn-primary2-custom" style="margin-right: 15px;">J'annule</a>
+                    <a href="{{ path('campaign_accept_all', {'id': campaign.id} )}}" type="button" class="btn btn-primary-custom font-weight-bold">Je valide ma commande</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

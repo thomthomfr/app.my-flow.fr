@@ -1,0 +1,45 @@
+<div class="modal fade" tabindex="-1" id="kt_modal_initialTime" {{ stimulus_target('order--index', 'addTimeModal') }}>
+    {{ form_start(formMissionInitialTime, {'attr':{'data-order--index-target':'missionInitialTimeForm'}}) }}
+    <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Évaluation</h3>
+
+                    <!--begin::Close-->
+                    <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <span class="svg-icon svg-icon-1"></span>
+                    </div>
+                    <!--end::Close-->
+                </div>
+
+                <div class="modal-body">
+                    <p>Produit selectionné : <strong><span class="color-blue-custom" id="productName" {{ stimulus_target('order--index','productName') }}></span></strong></p>
+
+                    <div class="form-group row">
+                        {{ form_label(formMissionInitialTime.initialTime, null, {'label_attr':{'class':'col-xl-6 col-lg-6 col-form-label'}})}}
+                        <div class="col-lg-6 col-xl-6">
+                            <div class="input-group mb-5">
+                                {{ form_widget(formMissionInitialTime.initialTime, {'attr':{'class':formMissionInitialTime.initialTime.vars.errors|length ? 'form-control is-invalid':'form-control mb-5', 'data-order--index-target':'initialTime', 'required':'required'}}) }}
+                                <span class="input-group-text" id="basic-addon2" style="height: fit-content;">minute(s)</span>
+                                {{ form_errors(formMissionInitialTime.initialTime) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        {{ form_label(formMissionInitialTime.estimatedIncome, null, {'label_attr':{'class':'col-xl-6 col-lg-6 col-form-label'}})}}
+                        <div class="col-lg-6 col-xl-6">
+                            <div class="input-group mb-5">
+                                {{ form_widget(formMissionInitialTime.estimatedIncome, {'attr':{'class':formMissionInitialTime.estimatedIncome.vars.errors|length ? 'form-control is-invalid':'form-control mb-5', 'data-order--index-target':'estimatedIncome', 'required':'required'}}) }}
+                                <span class="input-group-text" id="basic-addon2" style="height: fit-content;width: 85px;">Euros</span>
+                                {{ form_errors(formMissionInitialTime.estimatedIncome) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        {{ form_widget(formMissionInitialTime.submit, {'attr':{'class':'btn btn-primary-custom'}}) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{ form_end(formMissionInitialTime)}}
+</div>
